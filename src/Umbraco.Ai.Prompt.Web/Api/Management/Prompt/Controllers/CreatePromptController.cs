@@ -65,9 +65,9 @@ public class CreatePromptController : PromptControllerBase
         };
 
         return CreatedAtAction(
-            nameof(ByIdPromptController.GetById),
-            "ByIdPrompt",
-            new { id = prompt.Id },
+            nameof(ByIdOrAliasPromptController.GetPromptByIdOrAlias),
+            "ByIdOrAliasPrompt",
+            new { promptIdOrAlias = prompt.Id },
             response);
     }
 }

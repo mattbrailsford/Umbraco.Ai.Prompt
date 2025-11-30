@@ -27,10 +27,6 @@ internal sealed class PromptService : IPromptService
         => _repository.GetAllAsync(cancellationToken);
 
     /// <inheritdoc />
-    public Task<IEnumerable<Prompt>> GetByProfileAsync(Guid profileId, CancellationToken cancellationToken = default)
-        => _repository.GetByProfileAsync(profileId, cancellationToken);
-
-    /// <inheritdoc />
     public Task<PagedModel<Prompt>> GetPagedAsync(
         int skip,
         int take,

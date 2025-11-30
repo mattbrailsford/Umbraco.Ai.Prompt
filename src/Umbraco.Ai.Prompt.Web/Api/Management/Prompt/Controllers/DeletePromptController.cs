@@ -2,6 +2,8 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Ai.Prompt.Core.Prompts;
+using Umbraco.Ai.Prompt.Extensions;
+using Umbraco.Ai.Web.Api.Common.Models;
 
 namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 
@@ -24,15 +26,24 @@ public class DeletePromptController : PromptControllerBase
     /// <summary>
     /// Deletes a prompt.
     /// </summary>
-    /// <param name="id">The prompt ID.</param>
+    /// <param name="promptIdOrAlias">The prompt ID (GUID) or alias (string).</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>No content if successful.</returns>
-    [HttpDelete("{id:guid}")]
+    [HttpDelete($"{{{nameof(promptIdOrAlias)}}}")]
+    [MapToApiVersion("1.0")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Delete(
+        IdOrAlias promptIdOrAlias,
+        CancellationToken cancellationToken = default)
     {
-        var deleted = await _promptService.DeleteAsync(id, cancellationToken);
+        var promptId = await _promptService.TryGetPromptIdAsync(promptIdOrAlias, cancellationToken);
+        if (promptId is null)
+        {
+            return PromptNotFound();
+        }
+
+        var deleted = await _promptService.DeleteAsync(promptId.Value, cancellationToken);
         if (!deleted)
         {
             return PromptNotFound();

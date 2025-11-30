@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Ai.Prompt.Web", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Ai.Prompt.Web.StaticAssets", "src\Umbraco.Ai.Prompt.Web.StaticAssets\Umbraco.Ai.Prompt.Web.StaticAssets.csproj", "{42EBC5DE-3D02-43C2-ADF7-8AE02A4B7099}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AD53D7F3-BAC3-47C0-997B-49D39918D00F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

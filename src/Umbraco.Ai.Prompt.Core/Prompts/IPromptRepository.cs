@@ -31,14 +31,6 @@ public interface IPromptRepository
     Task<IEnumerable<Prompt>> GetAllAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets prompts associated with a specific profile.
-    /// </summary>
-    /// <param name="profileId">The profile ID.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Prompts linked to the profile.</returns>
-    Task<IEnumerable<Prompt>> GetByProfileAsync(Guid profileId, CancellationToken cancellationToken = default);
-
-    /// <summary>
     /// Gets a paged list of prompts with optional filtering.
     /// </summary>
     /// <param name="skip">Number of items to skip.</param>

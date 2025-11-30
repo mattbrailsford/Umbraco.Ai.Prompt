@@ -2,7 +2,9 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Ai.Prompt.Core.Prompts;
+using Umbraco.Ai.Prompt.Extensions;
 using Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Models;
+using Umbraco.Ai.Web.Api.Common.Models;
 
 namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 
@@ -25,21 +27,28 @@ public class UpdatePromptController : PromptControllerBase
     /// <summary>
     /// Updates an existing prompt.
     /// </summary>
-    /// <param name="id">The prompt ID.</param>
+    /// <param name="promptIdOrAlias">The prompt ID (GUID) or alias (string).</param>
     /// <param name="model">The prompt update request.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The updated prompt.</returns>
-    [HttpPut("{id:guid}")]
+    [HttpPut($"{{{nameof(promptIdOrAlias)}}}")]
+    [MapToApiVersion("1.0")]
     [ProducesResponseType(typeof(PromptResponseModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update(
-        Guid id,
+        IdOrAlias promptIdOrAlias,
         [FromBody] UpdatePromptRequestModel model,
         CancellationToken cancellationToken = default)
     {
+        var promptId = await _promptService.TryGetPromptIdAsync(promptIdOrAlias, cancellationToken);
+        if (promptId is null)
+        {
+            return PromptNotFound();
+        }
+
         var prompt = await _promptService.UpdateAsync(
-            id,
+            promptId.Value,
             model.Name,
             model.Content,
             model.Description,

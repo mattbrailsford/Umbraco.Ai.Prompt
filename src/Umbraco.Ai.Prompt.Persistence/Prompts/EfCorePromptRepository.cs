@@ -58,22 +58,6 @@ internal sealed class EfCorePromptRepository : IPromptRepository
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<Core.Prompts.Prompt>> GetByProfileAsync(Guid profileId, CancellationToken cancellationToken = default)
-    {
-        using IEfCoreScope<UmbracoAiPromptDbContext> scope = _scopeProvider.CreateScope();
-
-        var entities = await scope.ExecuteWithContextAsync(async db =>
-            await db.Prompts.AsNoTracking()
-                .Where(e => e.ProfileId == profileId)
-                .OrderBy(e => e.Name)
-                .ToListAsync(cancellationToken));
-
-        scope.Complete();
-
-        return entities.Select(PromptEntityFactory.BuildDomain);
-    }
-
-    /// <inheritdoc />
     public async Task<PagedModel<Core.Prompts.Prompt>> GetPagedAsync(
         int skip,
         int take,

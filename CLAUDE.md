@@ -69,12 +69,13 @@ Endpoints are under `/umbraco/ai/management/api/v1/prompts/`:
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/prompts` | Get all prompts (paged) |
-| GET | `/prompts/{id}` | Get prompt by ID |
-| GET | `/prompts/alias/{alias}` | Get prompt by alias |
+| GET | `/prompts/{promptIdOrAlias}` | Get prompt by ID or alias |
 | GET | `/prompts/profile/{profileId}` | Get prompts by profile |
 | POST | `/prompts` | Create prompt |
-| PUT | `/prompts/{id}` | Update prompt |
-| DELETE | `/prompts/{id}` | Delete prompt |
+| PUT | `/prompts/{promptIdOrAlias}` | Update prompt by ID or alias |
+| DELETE | `/prompts/{promptIdOrAlias}` | Delete prompt by ID or alias |
+
+The `{promptIdOrAlias}` parameter accepts either a GUID (e.g., `550e8400-e29b-41d4-a716-446655440000`) or a string alias (e.g., `my-prompt-alias`). This pattern matches Umbraco.Ai's `IdOrAlias` convention.
 
 The API shares the same Swagger group (`ai-management`) as Umbraco.Ai.
 
