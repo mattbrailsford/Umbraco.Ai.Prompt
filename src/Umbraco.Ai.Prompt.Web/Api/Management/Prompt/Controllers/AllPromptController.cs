@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Ai.Prompt.Core.Prompts;
 using Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Models;
+using Umbraco.Cms.Api.Common.ViewModels.Pagination;
 using Umbraco.Cms.Core.Mapping;
-using Umbraco.Cms.Core.Models;
 
 namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 
@@ -15,15 +15,15 @@ namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 public class AllPromptController : PromptControllerBase
 {
     private readonly IPromptService _promptService;
-    private readonly IUmbracoMapper _mapper;
+    private readonly IUmbracoMapper _umbracoMapper;
 
     /// <summary>
     /// Creates a new instance of the controller.
     /// </summary>
-    public AllPromptController(IPromptService promptService, IUmbracoMapper mapper)
+    public AllPromptController(IPromptService promptService, IUmbracoMapper umbracoMapper)
     {
         _promptService = promptService;
-        _mapper = mapper;
+        _umbracoMapper = umbracoMapper;
     }
 
     /// <summary>
@@ -36,7 +36,8 @@ public class AllPromptController : PromptControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Paged list of prompts.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(PagedModel<PromptItemResponseModel>), StatusCodes.Status200OK)]
+    [MapToApiVersion("1.0")]
+    [ProducesResponseType(typeof(PagedViewModel<PromptItemResponseModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(
         int skip = 0,
         int take = 100,
@@ -46,16 +47,12 @@ public class AllPromptController : PromptControllerBase
     {
         var result = await _promptService.GetPagedAsync(skip, take, filter, profileId, cancellationToken);
 
-        var items = result.Items.Select(p => new PromptItemResponseModel
+        var viewModel = new PagedViewModel<PromptItemResponseModel>
         {
-            Id = p.Id,
-            Alias = p.Alias,
-            Name = p.Name,
-            Description = p.Description,
-            ProfileId = p.ProfileId,
-            IsActive = p.IsActive
-        }).ToList();
+            Total = result.Total,
+            Items = _umbracoMapper.MapEnumerable<Core.Prompts.Prompt, PromptItemResponseModel>(result.Items)
+        };
 
-        return Ok(new PagedModel<PromptItemResponseModel>(result.Total, items));
+        return Ok(viewModel);
     }
 }

@@ -5,6 +5,7 @@ using Umbraco.Ai.Prompt.Core.Prompts;
 using Umbraco.Ai.Prompt.Extensions;
 using Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Models;
 using Umbraco.Ai.Web.Api.Common.Models;
+using Umbraco.Cms.Core.Mapping;
 
 namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 
@@ -15,13 +16,15 @@ namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 public class ByIdOrAliasPromptController : PromptControllerBase
 {
     private readonly IPromptService _promptService;
+    private readonly IUmbracoMapper _umbracoMapper;
 
     /// <summary>
     /// Creates a new instance of the controller.
     /// </summary>
-    public ByIdOrAliasPromptController(IPromptService promptService)
+    public ByIdOrAliasPromptController(IPromptService promptService, IUmbracoMapper umbracoMapper)
     {
         _promptService = promptService;
+        _umbracoMapper = umbracoMapper;
     }
 
     /// <summary>
@@ -44,18 +47,6 @@ public class ByIdOrAliasPromptController : PromptControllerBase
             return PromptNotFound();
         }
 
-        return Ok(new PromptResponseModel
-        {
-            Id = prompt.Id,
-            Alias = prompt.Alias,
-            Name = prompt.Name,
-            Description = prompt.Description,
-            Content = prompt.Content,
-            ProfileId = prompt.ProfileId,
-            Tags = prompt.Tags,
-            IsActive = prompt.IsActive,
-            DateCreated = prompt.DateCreated,
-            DateModified = prompt.DateModified
-        });
+        return Ok(_umbracoMapper.Map<PromptResponseModel>(prompt));
     }
 }

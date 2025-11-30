@@ -8,50 +8,50 @@ public class PromptResponseModel
     /// <summary>
     /// The unique identifier.
     /// </summary>
-    public required Guid Id { get; init; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// The unique alias.
     /// </summary>
-    public required string Alias { get; init; }
+    public string Alias { get; set; } = string.Empty;
 
     /// <summary>
     /// The display name.
     /// </summary>
-    public required string Name { get; init; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Optional description.
     /// </summary>
-    public string? Description { get; init; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// The prompt content.
     /// </summary>
-    public required string Content { get; init; }
+    public string Content { get; set; } = string.Empty;
 
     /// <summary>
     /// Optional linked profile ID.
     /// </summary>
-    public Guid? ProfileId { get; init; }
+    public Guid? ProfileId { get; set; }
 
     /// <summary>
     /// Tags for categorization.
     /// </summary>
-    public IEnumerable<string> Tags { get; init; } = [];
+    public IEnumerable<string> Tags { get; set; } = [];
 
     /// <summary>
     /// Whether the prompt is active.
     /// </summary>
-    public bool IsActive { get; init; }
+    public bool IsActive { get; set; }
 
     /// <summary>
     /// Creation timestamp.
     /// </summary>
-    public DateTime DateCreated { get; init; }
+    public DateTime DateCreated { get; set; }
 
     /// <summary>
     /// Last modification timestamp.
     /// </summary>
-    public DateTime DateModified { get; init; }
+    public DateTime DateModified { get; set; }
 }
