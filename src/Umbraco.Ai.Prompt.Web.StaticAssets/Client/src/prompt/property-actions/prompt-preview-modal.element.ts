@@ -1,7 +1,7 @@
 import { html, css, customElement, state, nothing } from '@umbraco-cms/backoffice/external/lit';
 import { UmbModalBaseElement } from '@umbraco-cms/backoffice/modal';
 import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
-import { UaiChatController, type UaiChatMessage } from '@umbraco-ai/core';
+import { UaiPromptController } from '../controllers/prompt.controller.js';
 import type { UaiPromptPreviewModalData, UaiPromptPreviewModalValue } from './types.js';
 
 /**
@@ -13,7 +13,7 @@ export class UaiPromptPreviewModalElement extends UmbModalBaseElement<
     UaiPromptPreviewModalData,
     UaiPromptPreviewModalValue
 > {
-    #chatController = new UaiChatController(this);
+    #promptController = new UaiPromptController(this);
     #abortController?: AbortController;
 
     @state()
@@ -47,28 +47,23 @@ export class UaiPromptPreviewModalElement extends UmbModalBaseElement<
 
         this.#abortController = new AbortController();
 
-        const messages: UaiChatMessage[] = [
-            { role: 'user', content: this.data.promptContent }
-        ];
-
-        try {
-            const { data, error } = await this.#chatController.complete(messages, {
+        const { data, error } = await this.#promptController.execute(
+            this.data.promptContent,
+            {
                 profileIdOrAlias: this.data.promptProfileId ?? undefined,
                 signal: this.#abortController.signal,
-            });
+            }
+        );
 
-            if (error) {
-                this._error = error instanceof Error ? error.message : 'Failed to generate response';
-            } else if (data) {
-                this._response = data.message.content;
+        if (error) {
+            if (error.name !== 'AbortError') {
+                this._error = error.message;
             }
-        } catch (err) {
-            if ((err as Error)?.name !== 'AbortError') {
-                this._error = err instanceof Error ? err.message : 'Failed to generate response';
-            }
-        } finally {
-            this._loading = false;
+        } else if (data) {
+            this._response = data.content;
         }
+
+        this._loading = false;
     }
 
     #onRetry() {
