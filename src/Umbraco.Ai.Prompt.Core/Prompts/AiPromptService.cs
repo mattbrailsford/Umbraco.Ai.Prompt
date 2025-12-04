@@ -36,71 +36,42 @@ internal sealed class AiPromptService : IAiPromptService
         => _repository.GetPagedAsync(skip, take, filter, profileId, cancellationToken);
 
     /// <inheritdoc />
-    public async Task<AiPrompt> CreateAsync(
-        string alias,
-        string name,
-        string content,
-        string? description = null,
-        Guid? profileId = null,
-        IEnumerable<string>? tags = null,
-        CancellationToken cancellationToken = default)
+    public async Task<AiPrompt> SavePromptAsync(AiPrompt prompt, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(alias);
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        ArgumentException.ThrowIfNullOrWhiteSpace(content);
+        ArgumentNullException.ThrowIfNull(prompt);
+        ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Alias);
+        ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Content);
 
-        if (await _repository.AliasExistsAsync(alias, cancellationToken: cancellationToken))
+        // Generate new ID if needed
+        if (prompt.Id == Guid.Empty)
         {
-            throw new InvalidOperationException($"A prompt with alias '{alias}' already exists.");
+            prompt = new AiPrompt
+            {
+                Id = Guid.NewGuid(),
+                Alias = prompt.Alias,
+                Name = prompt.Name,
+                Content = prompt.Content,
+                Description = prompt.Description,
+                ProfileId = prompt.ProfileId,
+                Tags = prompt.Tags,
+                IsActive = prompt.IsActive,
+                DateCreated = prompt.DateCreated,
+                DateModified = prompt.DateModified
+            };
         }
 
-        var now = DateTime.UtcNow;
-        var prompt = new AiPrompt
+        // Check for alias uniqueness
+        var existingByAlias = await _repository.GetByAliasAsync(prompt.Alias, cancellationToken);
+        if (existingByAlias is not null && existingByAlias.Id != prompt.Id)
         {
-            Id = Guid.NewGuid(),
-            Alias = alias,
-            Name = name,
-            Content = content,
-            Description = description,
-            ProfileId = profileId,
-            Tags = tags?.ToList() ?? [],
-            IsActive = true,
-            DateCreated = now,
-            DateModified = now
-        };
+            throw new InvalidOperationException($"A prompt with alias '{prompt.Alias}' already exists.");
+        }
+
+        // Update timestamp
+        prompt.DateModified = DateTime.UtcNow;
 
         return await _repository.SaveAsync(prompt, cancellationToken);
-    }
-
-    /// <inheritdoc />
-    public async Task<AiPrompt?> UpdateAsync(
-        Guid id,
-        string name,
-        string content,
-        string? description = null,
-        Guid? profileId = null,
-        IEnumerable<string>? tags = null,
-        bool isActive = true,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        ArgumentException.ThrowIfNullOrWhiteSpace(content);
-
-        var existing = await _repository.GetByIdAsync(id, cancellationToken);
-        if (existing is null)
-        {
-            return null;
-        }
-
-        existing.Name = name;
-        existing.Content = content;
-        existing.Description = description;
-        existing.ProfileId = profileId;
-        existing.Tags = tags?.ToList() ?? [];
-        existing.IsActive = isActive;
-        existing.DateModified = DateTime.UtcNow;
-
-        return await _repository.SaveAsync(existing, cancellationToken);
     }
 
     /// <inheritdoc />

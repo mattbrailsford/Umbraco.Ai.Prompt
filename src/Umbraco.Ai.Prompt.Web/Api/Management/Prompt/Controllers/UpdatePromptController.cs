@@ -33,47 +33,34 @@ public class UpdatePromptController : PromptControllerBase
     /// <returns>The updated prompt.</returns>
     [HttpPut($"{{{nameof(promptIdOrAlias)}}}")]
     [MapToApiVersion("1.0")]
-    [ProducesResponseType(typeof(PromptResponseModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdatePrompt(
         IdOrAlias promptIdOrAlias,
         [FromBody] UpdatePromptRequestModel model,
         CancellationToken cancellationToken = default)
     {
-        var promptId = await _aiPromptService.TryGetPromptIdAsync(promptIdOrAlias, cancellationToken);
-        if (promptId is null)
+        var existing = await _aiPromptService.GetPromptAsync(promptIdOrAlias, cancellationToken);
+        if (existing is null)
         {
             return PromptNotFound();
         }
 
-        var prompt = await _aiPromptService.UpdateAsync(
-            promptId.Value,
-            model.Name,
-            model.Content,
-            model.Description,
-            model.ProfileId,
-            model.Tags,
-            model.IsActive,
-            cancellationToken);
-
-        if (prompt is null)
+        var prompt = new AiPrompt
         {
-            return PromptNotFound();
-        }
+            Id = existing.Id,
+            Alias = existing.Alias, // Alias cannot be changed after creation
+            Name = model.Name,
+            Content = model.Content,
+            Description = model.Description,
+            ProfileId = model.ProfileId,
+            Tags = model.Tags?.ToList() ?? [],
+            IsActive = model.IsActive,
+            DateCreated = existing.DateCreated // Preserve original creation date
+        };
 
-        return Ok(new PromptResponseModel
-        {
-            Id = prompt.Id,
-            Alias = prompt.Alias,
-            Name = prompt.Name,
-            Description = prompt.Description,
-            Content = prompt.Content,
-            ProfileId = prompt.ProfileId,
-            Tags = prompt.Tags,
-            IsActive = prompt.IsActive,
-            DateCreated = prompt.DateCreated,
-            DateModified = prompt.DateModified
-        });
+        await _aiPromptService.SavePromptAsync(prompt, cancellationToken);
+        return Ok();
     }
 }

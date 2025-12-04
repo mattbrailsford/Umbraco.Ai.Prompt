@@ -47,46 +47,13 @@ public interface IAiPromptService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Creates a new prompt.
+    /// Save a prompt (insert if new, update if exists) with validation.
+    /// If prompt.Id is Guid.Empty, a new Guid will be generated.
     /// </summary>
-    /// <param name="alias">Unique alias.</param>
-    /// <param name="name">Display name.</param>
-    /// <param name="content">AiPrompt content.</param>
-    /// <param name="description">Optional description.</param>
-    /// <param name="profileId">Optional linked profile ID.</param>
-    /// <param name="tags">Optional tags.</param>
+    /// <param name="prompt">The prompt to save.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The created prompt.</returns>
-    Task<AiPrompt> CreateAsync(
-        string alias,
-        string name,
-        string content,
-        string? description = null,
-        Guid? profileId = null,
-        IEnumerable<string>? tags = null,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Updates an existing prompt.
-    /// </summary>
-    /// <param name="id">The prompt ID.</param>
-    /// <param name="name">Display name.</param>
-    /// <param name="content">AiPrompt content.</param>
-    /// <param name="description">Optional description.</param>
-    /// <param name="profileId">Optional linked profile ID.</param>
-    /// <param name="tags">Optional tags.</param>
-    /// <param name="isActive">Whether the prompt is active.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The updated prompt, or null if not found.</returns>
-    Task<AiPrompt?> UpdateAsync(
-        Guid id,
-        string name,
-        string content,
-        string? description = null,
-        Guid? profileId = null,
-        IEnumerable<string>? tags = null,
-        bool isActive = true,
-        CancellationToken cancellationToken = default);
+    /// <returns>The saved prompt.</returns>
+    Task<AiPrompt> SavePromptAsync(AiPrompt prompt, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes a prompt.
