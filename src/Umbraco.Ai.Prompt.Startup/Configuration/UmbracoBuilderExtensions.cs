@@ -20,7 +20,7 @@ public static class UmbracoBuilderExtensions
     public static IUmbracoBuilder AddUmbracoAiPrompt(this IUmbracoBuilder builder)
     {
         // Prevent multiple registrations
-        if (builder.Services.Any(x => x.ServiceType == typeof(IPromptService)))
+        if (builder.Services.Any(x => x.ServiceType == typeof(IAiPromptService)))
         {
             return builder;
         }

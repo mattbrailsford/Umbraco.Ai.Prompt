@@ -3,7 +3,7 @@ using UmbracoAiConstants = Umbraco.Ai.Web.Api.Constants;
 namespace Umbraco.Ai.Prompt.Web.Api;
 
 /// <summary>
-/// Constants for Umbraco AI Prompt Management API.
+/// Constants for Umbraco AI AiPrompt Management API.
 /// </summary>
 public class Constants
 {
@@ -28,7 +28,7 @@ public class Constants
         public static class Feature
         {
             /// <summary>
-            /// Prompt feature constants.
+            /// AiPrompt feature constants.
             /// </summary>
             public static class Prompt
             {

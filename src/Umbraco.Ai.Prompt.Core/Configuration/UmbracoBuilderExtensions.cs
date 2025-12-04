@@ -18,20 +18,20 @@ public static class UmbracoBuilderExtensions
     public static IUmbracoBuilder AddUmbracoAiPromptCore(this IUmbracoBuilder builder)
     {
         // Prevent multiple registrations
-        if (builder.Services.Any(x => x.ServiceType == typeof(IPromptService)))
+        if (builder.Services.Any(x => x.ServiceType == typeof(IAiPromptService)))
         {
             return builder;
         }
 
         // Bind configuration
-        builder.Services.Configure<PromptOptions>(
-            builder.Config.GetSection(PromptOptions.SectionName));
+        builder.Services.Configure<AiPromptOptions>(
+            builder.Config.GetSection(AiPromptOptions.SectionName));
 
         // Register in-memory repository as fallback (replaced by persistence layer)
-        builder.Services.AddSingleton<IPromptRepository, InMemoryPromptRepository>();
+        builder.Services.AddSingleton<IAiPromptRepository, InMemoryAiPromptRepository>();
 
         // Register service
-        builder.Services.AddSingleton<IPromptService, PromptService>();
+        builder.Services.AddSingleton<IAiPromptService, AiPromptService>();
 
         return builder;
     }

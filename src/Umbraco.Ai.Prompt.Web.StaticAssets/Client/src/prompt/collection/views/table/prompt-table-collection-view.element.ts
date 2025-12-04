@@ -53,7 +53,7 @@ export class UaiPromptTableCollectionViewElement extends UmbLitElement {
                 },
                 {
                     columnAlias: "isActive",
-                    value: html`<uui-tag color="${item.isActive ? 'positive' : 'default'}" look="outline">
+                    value: html`<uui-tag color=${item.isActive ? "positive" : "danger"}>
                         ${item.isActive ? 'Active' : 'Inactive'}
                     </uui-tag>`,
                 },

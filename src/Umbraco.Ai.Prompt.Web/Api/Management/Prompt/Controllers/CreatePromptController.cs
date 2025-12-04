@@ -12,14 +12,14 @@ namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 [ApiVersion("1.0")]
 public class CreatePromptController : PromptControllerBase
 {
-    private readonly IPromptService _promptService;
+    private readonly IAiPromptService _aiPromptService;
 
     /// <summary>
     /// Creates a new instance of the controller.
     /// </summary>
-    public CreatePromptController(IPromptService promptService)
+    public CreatePromptController(IAiPromptService aiPromptService)
     {
-        _promptService = promptService;
+        _aiPromptService = aiPromptService;
     }
 
     /// <summary>
@@ -29,19 +29,20 @@ public class CreatePromptController : PromptControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The created prompt.</returns>
     [HttpPost]
+    [MapToApiVersion("1.0")]
     [ProducesResponseType(typeof(PromptResponseModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(
+    public async Task<IActionResult> CreatePrompt(
         [FromBody] CreatePromptRequestModel model,
         CancellationToken cancellationToken = default)
     {
-        if (await _promptService.AliasExistsAsync(model.Alias, cancellationToken: cancellationToken))
+        if (await _aiPromptService.AliasExistsAsync(model.Alias, cancellationToken: cancellationToken))
         {
             return AliasAlreadyExists(model.Alias);
         }
 
-        var prompt = await _promptService.CreateAsync(
+        var prompt = await _aiPromptService.CreateAsync(
             model.Alias,
             model.Name,
             model.Content,

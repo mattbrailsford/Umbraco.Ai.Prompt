@@ -11,12 +11,12 @@ public class PromptMapDefinition : IMapDefinition
     /// <inheritdoc />
     public void DefineMaps(IUmbracoMapper mapper)
     {
-        mapper.Define<Core.Prompts.Prompt, PromptResponseModel>((_, _) => new PromptResponseModel(), Map);
-        mapper.Define<Core.Prompts.Prompt, PromptItemResponseModel>((_, _) => new PromptItemResponseModel(), MapItem);
+        mapper.Define<Core.Prompts.AiPrompt, PromptResponseModel>((_, _) => new PromptResponseModel(), Map);
+        mapper.Define<Core.Prompts.AiPrompt, PromptItemResponseModel>((_, _) => new PromptItemResponseModel(), MapItem);
     }
 
     // Umbraco.Code.MapAll
-    private static void Map(Core.Prompts.Prompt source, PromptResponseModel target, MapperContext context)
+    private static void Map(Core.Prompts.AiPrompt source, PromptResponseModel target, MapperContext context)
     {
         target.Id = source.Id;
         target.Alias = source.Alias;
@@ -31,7 +31,7 @@ public class PromptMapDefinition : IMapDefinition
     }
 
     // Umbraco.Code.MapAll
-    private static void MapItem(Core.Prompts.Prompt source, PromptItemResponseModel target, MapperContext context)
+    private static void MapItem(Core.Prompts.AiPrompt source, PromptItemResponseModel target, MapperContext context)
     {
         target.Id = source.Id;
         target.Alias = source.Alias;

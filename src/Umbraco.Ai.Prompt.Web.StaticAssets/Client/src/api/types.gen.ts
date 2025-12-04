@@ -58,9 +58,9 @@ export type ProblemDetails = {
     [key: string]: unknown | string | null | string | null | number | null | string | null | string | null | undefined;
 };
 
-export type PagedModelPromptItemResponseModel = {
-    items: Array<PromptItemResponseModel>;
+export type PagedPromptItemResponseModel = {
     total: number;
+    items: Array<PromptItemResponseModel>;
 };
 
 export type NotificationHeaderModel = {
@@ -80,7 +80,7 @@ export type CreatePromptRequestModel = {
     tags?: Array<string> | null;
 };
 
-export type GetAllData = {
+export type GetAllPromptsData = {
     body?: never;
     path?: never;
     query?: {
@@ -92,30 +92,30 @@ export type GetAllData = {
     url: '/umbraco/ai/management/api/v1/prompts';
 };
 
-export type GetAllErrors = {
+export type GetAllPromptsErrors = {
     /**
      * The resource is protected and requires an authentication token
      */
     401: unknown;
 };
 
-export type GetAllResponses = {
+export type GetAllPromptsResponses = {
     /**
      * OK
      */
-    200: PagedModelPromptItemResponseModel;
+    200: PagedPromptItemResponseModel;
 };
 
-export type GetAllResponse = GetAllResponses[keyof GetAllResponses];
+export type GetAllPromptsResponse = GetAllPromptsResponses[keyof GetAllPromptsResponses];
 
-export type CreateData = {
+export type CreatePromptData = {
     body?: CreatePromptRequestModel;
     path?: never;
     query?: never;
     url: '/umbraco/ai/management/api/v1/prompts';
 };
 
-export type CreateErrors = {
+export type CreatePromptErrors = {
     /**
      * Bad Request
      */
@@ -130,18 +130,18 @@ export type CreateErrors = {
     409: ProblemDetails;
 };
 
-export type CreateError = CreateErrors[keyof CreateErrors];
+export type CreatePromptError = CreatePromptErrors[keyof CreatePromptErrors];
 
-export type CreateResponses = {
+export type CreatePromptResponses = {
     /**
      * Created
      */
     201: PromptResponseModel;
 };
 
-export type CreateResponse = CreateResponses[keyof CreateResponses];
+export type CreatePromptResponse = CreatePromptResponses[keyof CreatePromptResponses];
 
-export type DeleteData = {
+export type DeletePromptData = {
     body?: never;
     path: {
         promptIdOrAlias: string;
@@ -150,7 +150,7 @@ export type DeleteData = {
     url: '/umbraco/ai/management/api/v1/prompts/{promptIdOrAlias}';
 };
 
-export type DeleteErrors = {
+export type DeletePromptErrors = {
     /**
      * The resource is protected and requires an authentication token
      */
@@ -161,16 +161,16 @@ export type DeleteErrors = {
     404: ProblemDetails;
 };
 
-export type DeleteError = DeleteErrors[keyof DeleteErrors];
+export type DeletePromptError = DeletePromptErrors[keyof DeletePromptErrors];
 
-export type DeleteResponses = {
+export type DeletePromptResponses = {
     /**
      * No Content
      */
     204: void;
 };
 
-export type DeleteResponse = DeleteResponses[keyof DeleteResponses];
+export type DeletePromptResponse = DeletePromptResponses[keyof DeletePromptResponses];
 
 export type GetPromptByIdOrAliasData = {
     body?: never;
@@ -203,7 +203,7 @@ export type GetPromptByIdOrAliasResponses = {
 
 export type GetPromptByIdOrAliasResponse = GetPromptByIdOrAliasResponses[keyof GetPromptByIdOrAliasResponses];
 
-export type UpdateData = {
+export type UpdatePromptData = {
     body?: UpdatePromptRequestModel;
     path: {
         promptIdOrAlias: string;
@@ -212,7 +212,7 @@ export type UpdateData = {
     url: '/umbraco/ai/management/api/v1/prompts/{promptIdOrAlias}';
 };
 
-export type UpdateErrors = {
+export type UpdatePromptErrors = {
     /**
      * Bad Request
      */
@@ -227,13 +227,13 @@ export type UpdateErrors = {
     404: ProblemDetails;
 };
 
-export type UpdateError = UpdateErrors[keyof UpdateErrors];
+export type UpdatePromptError = UpdatePromptErrors[keyof UpdatePromptErrors];
 
-export type UpdateResponses = {
+export type UpdatePromptResponses = {
     /**
      * OK
      */
     200: PromptResponseModel;
 };
 
-export type UpdateResponse = UpdateResponses[keyof UpdateResponses];
+export type UpdatePromptResponse = UpdatePromptResponses[keyof UpdatePromptResponses];
