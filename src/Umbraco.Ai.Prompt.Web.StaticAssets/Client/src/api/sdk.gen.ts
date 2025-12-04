@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateData, CreateErrors, CreateResponses, DeleteData, DeleteErrors, DeleteResponses, GetAllData, GetAllErrors, GetAllResponses, GetPromptByIdOrAliasData, GetPromptByIdOrAliasErrors, GetPromptByIdOrAliasResponses, UpdateData, UpdateErrors, UpdateResponses } from './types.gen';
+import type { CreatePromptData, CreatePromptErrors, CreatePromptResponses, DeletePromptData, DeletePromptErrors, DeletePromptResponses, GetAllPromptsData, GetAllPromptsErrors, GetAllPromptsResponses, GetPromptByIdOrAliasData, GetPromptByIdOrAliasErrors, GetPromptByIdOrAliasResponses, UpdatePromptData, UpdatePromptErrors, UpdatePromptResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -19,8 +19,8 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 export class PromptsService {
-    public static getAll<ThrowOnError extends boolean = false>(options?: Options<GetAllData, ThrowOnError>) {
-        return (options?.client ?? client).get<GetAllResponses, GetAllErrors, ThrowOnError>({
+    public static getAllPrompts<ThrowOnError extends boolean = false>(options?: Options<GetAllPromptsData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetAllPromptsResponses, GetAllPromptsErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -32,8 +32,8 @@ export class PromptsService {
         });
     }
     
-    public static create<ThrowOnError extends boolean = false>(options?: Options<CreateData, ThrowOnError>) {
-        return (options?.client ?? client).post<CreateResponses, CreateErrors, ThrowOnError>({
+    public static createPrompt<ThrowOnError extends boolean = false>(options?: Options<CreatePromptData, ThrowOnError>) {
+        return (options?.client ?? client).post<CreatePromptResponses, CreatePromptErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -49,8 +49,8 @@ export class PromptsService {
         });
     }
     
-    public static delete<ThrowOnError extends boolean = false>(options: Options<DeleteData, ThrowOnError>) {
-        return (options.client ?? client).delete<DeleteResponses, DeleteErrors, ThrowOnError>({
+    public static deletePrompt<ThrowOnError extends boolean = false>(options: Options<DeletePromptData, ThrowOnError>) {
+        return (options.client ?? client).delete<DeletePromptResponses, DeletePromptErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -75,8 +75,8 @@ export class PromptsService {
         });
     }
     
-    public static update<ThrowOnError extends boolean = false>(options: Options<UpdateData, ThrowOnError>) {
-        return (options.client ?? client).put<UpdateResponses, UpdateErrors, ThrowOnError>({
+    public static updatePrompt<ThrowOnError extends boolean = false>(options: Options<UpdatePromptData, ThrowOnError>) {
+        return (options.client ?? client).put<UpdatePromptResponses, UpdatePromptErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -94,8 +94,8 @@ export class PromptsService {
 }
 
 export class UmbracoAiPromptService {
-    public static getAll<ThrowOnError extends boolean = false>(options?: Options<GetAllData, ThrowOnError>) {
-        return (options?.client ?? client).get<GetAllResponses, GetAllErrors, ThrowOnError>({
+    public static getAllPrompts<ThrowOnError extends boolean = false>(options?: Options<GetAllPromptsData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetAllPromptsResponses, GetAllPromptsErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -107,8 +107,8 @@ export class UmbracoAiPromptService {
         });
     }
     
-    public static create<ThrowOnError extends boolean = false>(options?: Options<CreateData, ThrowOnError>) {
-        return (options?.client ?? client).post<CreateResponses, CreateErrors, ThrowOnError>({
+    public static createPrompt<ThrowOnError extends boolean = false>(options?: Options<CreatePromptData, ThrowOnError>) {
+        return (options?.client ?? client).post<CreatePromptResponses, CreatePromptErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -124,8 +124,8 @@ export class UmbracoAiPromptService {
         });
     }
     
-    public static delete<ThrowOnError extends boolean = false>(options: Options<DeleteData, ThrowOnError>) {
-        return (options.client ?? client).delete<DeleteResponses, DeleteErrors, ThrowOnError>({
+    public static deletePrompt<ThrowOnError extends boolean = false>(options: Options<DeletePromptData, ThrowOnError>) {
+        return (options.client ?? client).delete<DeletePromptResponses, DeletePromptErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -150,8 +150,8 @@ export class UmbracoAiPromptService {
         });
     }
     
-    public static update<ThrowOnError extends boolean = false>(options: Options<UpdateData, ThrowOnError>) {
-        return (options.client ?? client).put<UpdateResponses, UpdateErrors, ThrowOnError>({
+    public static updatePrompt<ThrowOnError extends boolean = false>(options: Options<UpdatePromptData, ThrowOnError>) {
+        return (options.client ?? client).put<UpdatePromptResponses, UpdatePromptErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',

@@ -4,9 +4,9 @@ using Umbraco.Ai.Prompt.Core.Prompts;
 namespace Umbraco.Ai.Prompt.Persistence.Prompts;
 
 /// <summary>
-/// Factory for converting between <see cref="Prompt"/> domain model and <see cref="PromptEntity"/>.
+/// Factory for converting between <see cref="AiPrompt"/> domain model and <see cref="AiPromptEntity"/>.
 /// </summary>
-internal static class PromptEntityFactory
+internal static class AiPromptEntityFactory
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -16,11 +16,11 @@ internal static class PromptEntityFactory
     /// <summary>
     /// Builds a domain model from an entity.
     /// </summary>
-    public static Core.Prompts.Prompt BuildDomain(PromptEntity entity)
+    public static Core.Prompts.AiPrompt BuildDomain(AiPromptEntity entity)
     {
         var tags = DeserializeTags(entity.TagsJson);
 
-        return new Core.Prompts.Prompt
+        return new Core.Prompts.AiPrompt
         {
             Id = entity.Id,
             Alias = entity.Alias,
@@ -38,35 +38,35 @@ internal static class PromptEntityFactory
     /// <summary>
     /// Builds an entity from a domain model.
     /// </summary>
-    public static PromptEntity BuildEntity(Core.Prompts.Prompt prompt)
+    public static AiPromptEntity BuildEntity(Core.Prompts.AiPrompt aiPrompt)
     {
-        return new PromptEntity
+        return new AiPromptEntity
         {
-            Id = prompt.Id,
-            Alias = prompt.Alias,
-            Name = prompt.Name,
-            Description = prompt.Description,
-            Content = prompt.Content,
-            ProfileId = prompt.ProfileId,
-            TagsJson = SerializeTags(prompt.Tags),
-            IsActive = prompt.IsActive,
-            DateCreated = prompt.DateCreated,
-            DateModified = prompt.DateModified
+            Id = aiPrompt.Id,
+            Alias = aiPrompt.Alias,
+            Name = aiPrompt.Name,
+            Description = aiPrompt.Description,
+            Content = aiPrompt.Content,
+            ProfileId = aiPrompt.ProfileId,
+            TagsJson = SerializeTags(aiPrompt.Tags),
+            IsActive = aiPrompt.IsActive,
+            DateCreated = aiPrompt.DateCreated,
+            DateModified = aiPrompt.DateModified
         };
     }
 
     /// <summary>
     /// Updates an existing entity from a domain model.
     /// </summary>
-    public static void UpdateEntity(PromptEntity entity, Core.Prompts.Prompt prompt)
+    public static void UpdateEntity(AiPromptEntity entity, Core.Prompts.AiPrompt aiPrompt)
     {
-        entity.Name = prompt.Name;
-        entity.Description = prompt.Description;
-        entity.Content = prompt.Content;
-        entity.ProfileId = prompt.ProfileId;
-        entity.TagsJson = SerializeTags(prompt.Tags);
-        entity.IsActive = prompt.IsActive;
-        entity.DateModified = prompt.DateModified;
+        entity.Name = aiPrompt.Name;
+        entity.Description = aiPrompt.Description;
+        entity.Content = aiPrompt.Content;
+        entity.ProfileId = aiPrompt.ProfileId;
+        entity.TagsJson = SerializeTags(aiPrompt.Tags);
+        entity.IsActive = aiPrompt.IsActive;
+        entity.DateModified = aiPrompt.DateModified;
     }
 
     private static string? SerializeTags(IReadOnlyList<string> tags)

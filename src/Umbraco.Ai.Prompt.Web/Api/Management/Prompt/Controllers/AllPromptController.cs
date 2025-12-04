@@ -14,15 +14,15 @@ namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 [ApiVersion("1.0")]
 public class AllPromptController : PromptControllerBase
 {
-    private readonly IPromptService _promptService;
+    private readonly IAiPromptService _aiPromptService;
     private readonly IUmbracoMapper _umbracoMapper;
 
     /// <summary>
     /// Creates a new instance of the controller.
     /// </summary>
-    public AllPromptController(IPromptService promptService, IUmbracoMapper umbracoMapper)
+    public AllPromptController(IAiPromptService aiPromptService, IUmbracoMapper umbracoMapper)
     {
-        _promptService = promptService;
+        _aiPromptService = aiPromptService;
         _umbracoMapper = umbracoMapper;
     }
 
@@ -38,19 +38,19 @@ public class AllPromptController : PromptControllerBase
     [HttpGet]
     [MapToApiVersion("1.0")]
     [ProducesResponseType(typeof(PagedViewModel<PromptItemResponseModel>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll(
+    public async Task<IActionResult> GetAllPrompts(
         int skip = 0,
         int take = 100,
         string? filter = null,
         Guid? profileId = null,
         CancellationToken cancellationToken = default)
     {
-        var result = await _promptService.GetPagedAsync(skip, take, filter, profileId, cancellationToken);
+        var result = await _aiPromptService.GetPagedAsync(skip, take, filter, profileId, cancellationToken);
 
         var viewModel = new PagedViewModel<PromptItemResponseModel>
         {
             Total = result.Total,
-            Items = _umbracoMapper.MapEnumerable<Core.Prompts.Prompt, PromptItemResponseModel>(result.Items)
+            Items = _umbracoMapper.MapEnumerable<Core.Prompts.AiPrompt, PromptItemResponseModel>(result.Items)
         };
 
         return Ok(viewModel);

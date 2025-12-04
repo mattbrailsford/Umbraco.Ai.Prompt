@@ -13,14 +13,14 @@ namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 [ApiVersion("1.0")]
 public class DeletePromptController : PromptControllerBase
 {
-    private readonly IPromptService _promptService;
+    private readonly IAiPromptService _aiPromptService;
 
     /// <summary>
     /// Creates a new instance of the controller.
     /// </summary>
-    public DeletePromptController(IPromptService promptService)
+    public DeletePromptController(IAiPromptService aiPromptService)
     {
-        _promptService = promptService;
+        _aiPromptService = aiPromptService;
     }
 
     /// <summary>
@@ -33,17 +33,17 @@ public class DeletePromptController : PromptControllerBase
     [MapToApiVersion("1.0")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(
+    public async Task<IActionResult> DeletePrompt(
         IdOrAlias promptIdOrAlias,
         CancellationToken cancellationToken = default)
     {
-        var promptId = await _promptService.TryGetPromptIdAsync(promptIdOrAlias, cancellationToken);
+        var promptId = await _aiPromptService.TryGetPromptIdAsync(promptIdOrAlias, cancellationToken);
         if (promptId is null)
         {
             return PromptNotFound();
         }
 
-        var deleted = await _promptService.DeleteAsync(promptId.Value, cancellationToken);
+        var deleted = await _aiPromptService.DeleteAsync(promptId.Value, cancellationToken);
         if (!deleted)
         {
             return PromptNotFound();

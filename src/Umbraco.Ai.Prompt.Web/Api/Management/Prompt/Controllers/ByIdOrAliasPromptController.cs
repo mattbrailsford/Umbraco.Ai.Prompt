@@ -15,15 +15,15 @@ namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 [ApiVersion("1.0")]
 public class ByIdOrAliasPromptController : PromptControllerBase
 {
-    private readonly IPromptService _promptService;
+    private readonly IAiPromptService _aiPromptService;
     private readonly IUmbracoMapper _umbracoMapper;
 
     /// <summary>
     /// Creates a new instance of the controller.
     /// </summary>
-    public ByIdOrAliasPromptController(IPromptService promptService, IUmbracoMapper umbracoMapper)
+    public ByIdOrAliasPromptController(IAiPromptService aiPromptService, IUmbracoMapper umbracoMapper)
     {
-        _promptService = promptService;
+        _aiPromptService = aiPromptService;
         _umbracoMapper = umbracoMapper;
     }
 
@@ -41,7 +41,7 @@ public class ByIdOrAliasPromptController : PromptControllerBase
         IdOrAlias promptIdOrAlias,
         CancellationToken cancellationToken = default)
     {
-        var prompt = await _promptService.GetPromptAsync(promptIdOrAlias, cancellationToken);
+        var prompt = await _aiPromptService.GetPromptAsync(promptIdOrAlias, cancellationToken);
         if (prompt is null)
         {
             return PromptNotFound();

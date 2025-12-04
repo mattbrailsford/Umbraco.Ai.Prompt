@@ -4,14 +4,14 @@ using Umbraco.Ai.Prompt.Persistence.Prompts;
 namespace Umbraco.Ai.Prompt.Persistence;
 
 /// <summary>
-/// EF Core DbContext for Umbraco AI Prompt persistence.
+/// EF Core DbContext for Umbraco AI AiPrompt persistence.
 /// </summary>
 public class UmbracoAiPromptDbContext : DbContext
 {
     /// <summary>
     /// Prompts table.
     /// </summary>
-    public DbSet<PromptEntity> Prompts { get; set; } = null!;
+    public DbSet<AiPromptEntity> Prompts { get; set; } = null!;
 
     /// <summary>
     /// Creates a new instance of the DbContext.
@@ -26,7 +26,7 @@ public class UmbracoAiPromptDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<PromptEntity>(entity =>
+        modelBuilder.Entity<AiPromptEntity>(entity =>
         {
             entity.ToTable("umbracoAiPrompt");
             entity.HasKey(e => e.Id);

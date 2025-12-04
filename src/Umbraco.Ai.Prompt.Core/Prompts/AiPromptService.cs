@@ -5,29 +5,29 @@ namespace Umbraco.Ai.Prompt.Core.Prompts;
 /// <summary>
 /// Service implementation for prompt management operations.
 /// </summary>
-internal sealed class PromptService : IPromptService
+internal sealed class AiPromptService : IAiPromptService
 {
-    private readonly IPromptRepository _repository;
+    private readonly IAiPromptRepository _repository;
 
-    public PromptService(IPromptRepository repository)
+    public AiPromptService(IAiPromptRepository repository)
     {
         _repository = repository;
     }
 
     /// <inheritdoc />
-    public Task<Prompt?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task<AiPrompt?> GetAsync(Guid id, CancellationToken cancellationToken = default)
         => _repository.GetByIdAsync(id, cancellationToken);
 
     /// <inheritdoc />
-    public Task<Prompt?> GetByAliasAsync(string alias, CancellationToken cancellationToken = default)
+    public Task<AiPrompt?> GetByAliasAsync(string alias, CancellationToken cancellationToken = default)
         => _repository.GetByAliasAsync(alias, cancellationToken);
 
     /// <inheritdoc />
-    public Task<IEnumerable<Prompt>> GetAllAsync(CancellationToken cancellationToken = default)
+    public Task<IEnumerable<AiPrompt>> GetAllAsync(CancellationToken cancellationToken = default)
         => _repository.GetAllAsync(cancellationToken);
 
     /// <inheritdoc />
-    public Task<PagedModel<Prompt>> GetPagedAsync(
+    public Task<PagedModel<AiPrompt>> GetPagedAsync(
         int skip,
         int take,
         string? filter = null,
@@ -36,7 +36,7 @@ internal sealed class PromptService : IPromptService
         => _repository.GetPagedAsync(skip, take, filter, profileId, cancellationToken);
 
     /// <inheritdoc />
-    public async Task<Prompt> CreateAsync(
+    public async Task<AiPrompt> CreateAsync(
         string alias,
         string name,
         string content,
@@ -55,7 +55,7 @@ internal sealed class PromptService : IPromptService
         }
 
         var now = DateTime.UtcNow;
-        var prompt = new Prompt
+        var prompt = new AiPrompt
         {
             Id = Guid.NewGuid(),
             Alias = alias,
@@ -73,7 +73,7 @@ internal sealed class PromptService : IPromptService
     }
 
     /// <inheritdoc />
-    public async Task<Prompt?> UpdateAsync(
+    public async Task<AiPrompt?> UpdateAsync(
         Guid id,
         string name,
         string content,

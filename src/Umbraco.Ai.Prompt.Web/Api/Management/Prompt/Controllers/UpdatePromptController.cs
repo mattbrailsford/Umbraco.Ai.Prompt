@@ -14,14 +14,14 @@ namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Controllers;
 [ApiVersion("1.0")]
 public class UpdatePromptController : PromptControllerBase
 {
-    private readonly IPromptService _promptService;
+    private readonly IAiPromptService _aiPromptService;
 
     /// <summary>
     /// Creates a new instance of the controller.
     /// </summary>
-    public UpdatePromptController(IPromptService promptService)
+    public UpdatePromptController(IAiPromptService aiPromptService)
     {
-        _promptService = promptService;
+        _aiPromptService = aiPromptService;
     }
 
     /// <summary>
@@ -36,18 +36,18 @@ public class UpdatePromptController : PromptControllerBase
     [ProducesResponseType(typeof(PromptResponseModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Update(
+    public async Task<IActionResult> UpdatePrompt(
         IdOrAlias promptIdOrAlias,
         [FromBody] UpdatePromptRequestModel model,
         CancellationToken cancellationToken = default)
     {
-        var promptId = await _promptService.TryGetPromptIdAsync(promptIdOrAlias, cancellationToken);
+        var promptId = await _aiPromptService.TryGetPromptIdAsync(promptIdOrAlias, cancellationToken);
         if (promptId is null)
         {
             return PromptNotFound();
         }
 
-        var prompt = await _promptService.UpdateAsync(
+        var prompt = await _aiPromptService.UpdateAsync(
             promptId.Value,
             model.Name,
             model.Content,

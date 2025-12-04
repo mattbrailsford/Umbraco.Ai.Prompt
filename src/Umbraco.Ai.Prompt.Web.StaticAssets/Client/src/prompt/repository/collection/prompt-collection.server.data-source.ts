@@ -21,7 +21,7 @@ export class UaiPromptCollectionServerDataSource implements UmbCollectionDataSou
     async getCollection(filter: UmbCollectionFilterModel) {
         const { data, error } = await tryExecute(
             this.#host,
-            PromptsService.getAll({
+            PromptsService.getAllPrompts({
                 query: {
                     skip: filter.skip ?? 0,
                     take: filter.take ?? 100,

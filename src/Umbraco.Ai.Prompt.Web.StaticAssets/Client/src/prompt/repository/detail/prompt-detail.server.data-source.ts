@@ -62,7 +62,7 @@ export class UaiPromptDetailServerDataSource implements UmbDetailDataSource<UaiP
 
         const { response, error } = await tryExecute(
             this.#host,
-            PromptsService.create({ body: requestBody })
+            PromptsService.createPrompt({ body: requestBody })
         );
 
         if (error) {
@@ -89,7 +89,7 @@ export class UaiPromptDetailServerDataSource implements UmbDetailDataSource<UaiP
 
         const { error } = await tryExecute(
             this.#host,
-            PromptsService.update({
+            PromptsService.updatePrompt({
                 path: { promptIdOrAlias: model.unique },
                 body: requestBody,
             })
@@ -108,7 +108,7 @@ export class UaiPromptDetailServerDataSource implements UmbDetailDataSource<UaiP
     async delete(unique: string) {
         const { error } = await tryExecute(
             this.#host,
-            PromptsService.delete({ path: { promptIdOrAlias: unique } })
+            PromptsService.deletePrompt({ path: { promptIdOrAlias: unique } })
         );
 
         if (error) {
