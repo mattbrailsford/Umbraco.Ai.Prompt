@@ -4,26 +4,43 @@ export type ClientOptions = {
     baseUrl: 'https://localhost:44363' | (string & {});
 };
 
-export type ValidationProblemDetails = {
-    type?: string | null;
-    title?: string | null;
-    status?: number | null;
-    detail?: string | null;
-    instance?: string | null;
-    errors: {
-        [key: string]: Array<string>;
-    };
-    [key: string]: unknown | string | null | string | null | number | null | string | null | string | null | {
-        [key: string]: Array<string>;
-    } | undefined;
-};
-
-export type UpdatePromptRequestModel = {
+export type CreatePromptRequestModel = {
+    alias: string;
     name: string;
     content: string;
     description?: string | null;
     profileId?: string | null;
     tags?: Array<string> | null;
+};
+
+export type EventMessageTypeModel = 'Default' | 'Info' | 'Error' | 'Success' | 'Warning';
+
+export type NotificationHeaderModel = {
+    message: string;
+    category: string;
+    type: EventMessageTypeModel;
+};
+
+export type PagedPromptItemResponseModel = {
+    total: number;
+    items: Array<PromptItemResponseModel>;
+};
+
+export type ProblemDetails = {
+    type?: string | null;
+    title?: string | null;
+    status?: number | null;
+    detail?: string | null;
+    instance?: string | null;
+    [key: string]: unknown | string | null | string | null | number | null | string | null | string | null | undefined;
+};
+
+export type PromptItemResponseModel = {
+    id: string;
+    alias: string;
+    name: string;
+    description?: string | null;
+    profileId?: string | null;
     isActive: boolean;
 };
 
@@ -40,44 +57,28 @@ export type PromptResponseModel = {
     dateModified: string;
 };
 
-export type PromptItemResponseModel = {
-    id: string;
-    alias: string;
-    name: string;
-    description?: string | null;
-    profileId?: string | null;
-    isActive: boolean;
-};
-
-export type ProblemDetails = {
-    type?: string | null;
-    title?: string | null;
-    status?: number | null;
-    detail?: string | null;
-    instance?: string | null;
-    [key: string]: unknown | string | null | string | null | number | null | string | null | string | null | undefined;
-};
-
-export type PagedPromptItemResponseModel = {
-    total: number;
-    items: Array<PromptItemResponseModel>;
-};
-
-export type NotificationHeaderModel = {
-    message: string;
-    category: string;
-    type: EventMessageTypeModel;
-};
-
-export type EventMessageTypeModel = 'Default' | 'Info' | 'Error' | 'Success' | 'Warning';
-
-export type CreatePromptRequestModel = {
+export type UpdatePromptRequestModel = {
     alias: string;
     name: string;
     content: string;
     description?: string | null;
     profileId?: string | null;
     tags?: Array<string> | null;
+    isActive: boolean;
+};
+
+export type ValidationProblemDetails = {
+    type?: string | null;
+    title?: string | null;
+    status?: number | null;
+    detail?: string | null;
+    instance?: string | null;
+    errors: {
+        [key: string]: Array<string>;
+    };
+    [key: string]: unknown | string | null | string | null | number | null | string | null | string | null | {
+        [key: string]: Array<string>;
+    } | undefined;
 };
 
 export type GetAllPromptsData = {
@@ -216,7 +217,7 @@ export type UpdatePromptErrors = {
     /**
      * Bad Request
      */
-    400: ValidationProblemDetails;
+    400: ProblemDetails;
     /**
      * The resource is protected and requires an authentication token
      */
@@ -233,7 +234,5 @@ export type UpdatePromptResponses = {
     /**
      * OK
      */
-    200: PromptResponseModel;
+    200: unknown;
 };
-
-export type UpdatePromptResponse = UpdatePromptResponses[keyof UpdatePromptResponses];

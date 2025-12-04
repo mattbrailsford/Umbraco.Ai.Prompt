@@ -42,7 +42,7 @@ internal sealed class AiPromptService : IAiPromptService
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Alias);
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Name);
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Content);
-
+        
         // Generate new ID if needed
         if (prompt.Id == Guid.Empty)
         {

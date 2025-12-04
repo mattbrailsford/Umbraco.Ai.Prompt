@@ -41,6 +41,7 @@ export const UaiPromptTypeMapper = {
 
     toUpdateRequest(model: UaiPromptDetailModel) {
         return {
+            alias: model.alias,
             name: model.name,
             content: model.content,
             description: model.description,

@@ -60,6 +60,7 @@ internal static class AiPromptEntityFactory
     /// </summary>
     public static void UpdateEntity(AiPromptEntity entity, Core.Prompts.AiPrompt aiPrompt)
     {
+        entity.Alias = aiPrompt.Alias;
         entity.Name = aiPrompt.Name;
         entity.Description = aiPrompt.Description;
         entity.Content = aiPrompt.Content;

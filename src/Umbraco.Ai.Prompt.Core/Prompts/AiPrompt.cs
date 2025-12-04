@@ -13,7 +13,7 @@ public class AiPrompt
     /// <summary>
     /// Unique alias for the prompt (URL-safe identifier).
     /// </summary>
-    public required string Alias { get; init; }
+    public required string Alias { get; set; }
 
     /// <summary>
     /// Display name for the prompt.

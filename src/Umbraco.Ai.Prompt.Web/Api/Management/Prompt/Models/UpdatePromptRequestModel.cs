@@ -8,6 +8,14 @@ namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Models;
 public class UpdatePromptRequestModel
 {
     /// <summary>
+    /// The unique alias (URL-safe identifier).
+    /// </summary>
+    [Required]
+    [StringLength(100, MinimumLength = 1)]
+    [RegularExpression(@"^[a-zA-Z0-9_-]+$", ErrorMessage = "Alias must contain only letters, numbers, hyphens, and underscores.")]
+    public required string Alias { get; init; }
+    
+    /// <summary>
     /// The display name.
     /// </summary>
     [Required]
