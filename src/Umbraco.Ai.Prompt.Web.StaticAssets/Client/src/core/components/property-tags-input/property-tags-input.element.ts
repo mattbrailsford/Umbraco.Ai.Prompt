@@ -2,9 +2,21 @@ import { customElement, html, property } from "@umbraco-cms/backoffice/external/
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { UmbChangeEvent } from "@umbraco-cms/backoffice/event";
 import { tryExecute } from "@umbraco-cms/backoffice/resources";
-import type { UaiTagItem, UaiTagLookupCallback } from "@umbraco-ai/core";
 import "@umbraco-ai/core";
 import { UtilsService } from "../../../api/index.js";
+
+/**
+ * Tag item for lookup results.
+ */
+interface TagItem {
+    id: string;
+    text: string;
+}
+
+/**
+ * Callback type for tag lookup.
+ */
+type TagLookupCallback = (query: string) => Promise<TagItem[]>;
 
 /**
  * A tags input component for selecting property aliases.
@@ -41,7 +53,7 @@ export class UaiPropertyTagsInputElement extends UmbLitElement {
     /**
      * Lookup callback for fetching property aliases.
      */
-    #lookup: UaiTagLookupCallback = async (query: string): Promise<UaiTagItem[]> => {
+    #lookup: TagLookupCallback = async (query: string): Promise<TagItem[]> => {
         const { data } = await tryExecute(
             this,
             UtilsService.getPropertyAliases({ query: { query } })

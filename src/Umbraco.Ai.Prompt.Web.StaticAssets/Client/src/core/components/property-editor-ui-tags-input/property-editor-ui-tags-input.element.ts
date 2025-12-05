@@ -1,9 +1,21 @@
 import { customElement, html, property } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { UmbChangeEvent } from "@umbraco-cms/backoffice/event";
-import type { UaiTagItem, UaiTagLookupCallback } from "@umbraco-ai/core";
 import "@umbraco-ai/core";
 import { TEXT_BASED_PROPERTY_EDITOR_UIS } from "../../../prompt/property-actions/constants.js";
+
+/**
+ * Tag item for lookup results.
+ */
+interface TagItem {
+    id: string;
+    text: string;
+}
+
+/**
+ * Callback type for tag lookup.
+ */
+type TagLookupCallback = (query: string) => Promise<TagItem[]>;
 
 /**
  * A tags input component for selecting text-based property editor UI aliases.
@@ -44,7 +56,7 @@ export class UaiPropertyEditorUiTagsInputElement extends UmbLitElement {
      * Lookup callback for fetching text-based property editor UI aliases.
      * Only returns aliases from the TEXT_BASED_PROPERTY_EDITOR_UIS list.
      */
-    #lookup: UaiTagLookupCallback = async (query: string): Promise<UaiTagItem[]> => {
+    #lookup: TagLookupCallback = async (query: string): Promise<TagItem[]> => {
         const lowerQuery = query.toLowerCase();
 
         return TEXT_BASED_PROPERTY_EDITOR_UIS
