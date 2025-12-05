@@ -8,8 +8,8 @@ export interface PropertyActionContext {
     propertyEditorUiAlias: string;
     /** The property alias (e.g., 'pageTitle'). */
     propertyAlias: string;
-    /** The document type alias (e.g., 'article'). May be null if not in a document context. */
-    documentTypeAlias: string | null;
+    /** The document type aliases including compositions (e.g., ['article', 'seoMixin']). */
+    documentTypeAliases: string[];
 }
 
 /**
@@ -66,9 +66,10 @@ function matchesRule(rule: UaiScopeRule, context: PropertyActionContext): boolea
         }
     }
 
-    // Check document type alias
+    // Check document type alias (match if any context alias is in the rule's aliases)
     if (rule.documentTypeAliases && rule.documentTypeAliases.length > 0) {
-        if (!context.documentTypeAlias || !rule.documentTypeAliases.includes(context.documentTypeAlias)) {
+        const hasMatch = context.documentTypeAliases.some((alias) => rule.documentTypeAliases!.includes(alias));
+        if (!hasMatch) {
             return false;
         }
     }
