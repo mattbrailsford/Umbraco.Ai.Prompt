@@ -250,3 +250,28 @@ export type UpdatePromptResponses = {
      */
     200: unknown;
 };
+
+export type GetPropertyAliasesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        query?: string;
+    };
+    url: '/umbraco/ai/management/api/v1/utils/property-aliases';
+};
+
+export type GetPropertyAliasesErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetPropertyAliasesResponses = {
+    /**
+     * OK
+     */
+    200: Array<string>;
+};
+
+export type GetPropertyAliasesResponse = GetPropertyAliasesResponses[keyof GetPropertyAliasesResponses];
