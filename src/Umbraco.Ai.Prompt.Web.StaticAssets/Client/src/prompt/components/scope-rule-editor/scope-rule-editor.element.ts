@@ -105,24 +105,21 @@ export class UaiScopeRuleEditorElement extends UmbLitElement {
 
         return html`
             <div class="rule-card">
-                <button
-                    type="button"
-                    class="rule-header"
-                    @click=${this.#toggleCollapsed}
-                    aria-expanded=${!this._collapsed}
-                >
+                <div class="rule-header" @click=${this.#toggleCollapsed} aria-expanded=${!this._collapsed}>
                     <uui-symbol-expand ?open=${!this._collapsed}></uui-symbol-expand>
                     <span class="rule-summary">${summary}</span>
-                    <uui-button
-                        look="secondary"
-                        color="danger"
-                        compact
-                        @click=${this.#onRemove}
-                        label="Remove rule"
-                    >
-                        <uui-icon name="icon-trash"></uui-icon>
-                    </uui-button>
-                </button>
+                    <uui-action-bar>
+                        <uui-button
+                                look="secondary"
+                                color="defaul"
+                                compact
+                                @click=${this.#onRemove}
+                                label="Remove rule"
+                        >
+                            <uui-icon name="icon-trash"></uui-icon>
+                        </uui-button>
+                    </uui-action-bar>
+                </div>
 
                 <div class="rule-content" ?hidden=${this._collapsed}>
                     <umb-property-layout
@@ -173,41 +170,40 @@ export class UaiScopeRuleEditorElement extends UmbLitElement {
         css`
             :host {
                 display: block;
+                --umb-scope-rule-entry-actions-opacity: 0;
             }
 
-            .rule-card {
-                border: 1px solid var(--uui-color-border);
-                border-radius: var(--uui-border-radius);
-                background: var(--uui-color-surface);
-                overflow: hidden;
+            :host(:hover),
+            :host(:focus-within) {
+                --umb-scope-rule-entry-actions-opacity: 1;
+            }
+
+            uui-action-bar {
+                opacity: var(--umb-scope-rule-entry-actions-opacity, 0);
+                transition: opacity 120ms;
             }
 
             .rule-header {
                 display: flex;
                 align-items: center;
                 gap: var(--uui-size-space-3);
-                width: 100%;
                 padding: var(--uui-size-space-3) var(--uui-size-space-4);
                 background: transparent;
-                border: none;
                 cursor: pointer;
                 text-align: left;
                 font: inherit;
                 color: inherit;
+                --umb-block-list-entry-actions-opacity: 0;
+                border: 1px solid var(--uui-color-border);
             }
 
-            .rule-header:hover {
-                background: var(--uui-color-surface-alt);
-            }
-
-            .rule-header:focus {
-                outline: 2px solid var(--uui-color-focus);
-                outline-offset: -2px;
+            .rule-header:hover,
+            .rule-header:focus{
+                border-color: var(--uui-color-border-emphasis);
             }
 
             .rule-summary {
                 flex: 1;
-                font-size: var(--uui-type-small-size);
                 color: var(--uui-color-text-alt);
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -215,11 +211,12 @@ export class UaiScopeRuleEditorElement extends UmbLitElement {
             }
 
             .rule-content {
-                padding: var(--uui-size-space-4);
-                padding-top: 0;
+                padding: var(--uui-size-space-6);
                 display: flex;
                 flex-direction: column;
-                gap: var(--uui-size-space-2);
+                gap: var(--uui-size-space-6);
+                border: 1px solid var(--uui-color-border);
+                border-top: 0;
             }
 
             .rule-content[hidden] {

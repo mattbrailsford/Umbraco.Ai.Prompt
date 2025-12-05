@@ -1,4 +1,4 @@
-import { customElement, html, property } from "@umbraco-cms/backoffice/external/lit";
+import { css, customElement, html, property } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { UmbChangeEvent } from "@umbraco-cms/backoffice/event";
 import "@umbraco-ai/core";
@@ -114,6 +114,14 @@ export class UaiPropertyEditorUiTagsInputElement extends UmbLitElement {
             ></uai-tags-input>
         `;
     }
+
+    static styles = [
+        css`
+            :host {
+                display: block;
+            }
+        `,
+    ];
 }
 
 export default UaiPropertyEditorUiTagsInputElement;

@@ -190,9 +190,10 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                 </umb-property-layout>
             </uui-box>
 
-            <uui-box headline="Include Rules">
+            <uui-box headline="Scope Configuration">
+                
                 <umb-property-layout
-                    label="Where to show"
+                    label="Include Rules"
                     description="Prompt appears where ANY rule matches (OR logic between rules)"
                 >
                     <div slot="editor" class="rules-container">
@@ -212,12 +213,10 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                         </uui-button>
                     </div>
                 </umb-property-layout>
-            </uui-box>
 
-            <uui-box headline="Exclude Rules" class="exclude-box">
                 <umb-property-layout
-                    label="Where to hide"
-                    description="Prompt is hidden where ANY rule matches (overrides includes)"
+                        label="Exclude Rules"
+                        description="Prompt is hidden where ANY rule matches (overrides includes)"
                 >
                     <div slot="editor" class="rules-container">
                         ${scope.excludeRules.map((rule, index) => html`
@@ -228,14 +227,15 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                             ></uai-scope-rule-editor>
                         `)}
                         <uui-button
-                            look="placeholder"
-                            @click=${this.#onAddExcludeRule}
+                                look="placeholder"
+                                @click=${this.#onAddExcludeRule}
                         >
                             <uui-icon name="icon-add"></uui-icon>
                             Add Exclude Rule
                         </uui-button>
                     </div>
                 </umb-property-layout>
+                
             </uui-box>
 
             ${this._model.tags.length > 0 ? html`
