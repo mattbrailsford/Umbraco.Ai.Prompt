@@ -251,6 +251,31 @@ export type UpdatePromptResponses = {
     200: unknown;
 };
 
+export type GetDocumentTypeAliasesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        query?: string;
+    };
+    url: '/umbraco/ai/management/api/v1/utils/document-type-aliases';
+};
+
+export type GetDocumentTypeAliasesErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetDocumentTypeAliasesResponses = {
+    /**
+     * OK
+     */
+    200: Array<string>;
+};
+
+export type GetDocumentTypeAliasesResponse = GetDocumentTypeAliasesResponses[keyof GetDocumentTypeAliasesResponses];
+
 export type GetPropertyAliasesData = {
     body?: never;
     path?: never;
