@@ -300,16 +300,17 @@ export class UaiScopeRuleEditorElement extends UmbLitElement {
                     </uui-button>
                 </div>
                 <div class="rule-fields">
+
                     <umb-property-layout
-                        label="Property Editor UIs"
-                        description="Comma-separated list (e.g., Umb.PropertyEditorUi.TextBox). Empty = any."
-                        orientation="vertical"
+                            label="Document Type Aliases"
+                            description="Comma-separated list (e.g., article, blogPost). Empty = any."
+                            orientation="vertical"
                     >
                         <uui-input
-                            slot="editor"
-                            .value=${this.rule.propertyEditorUiAliases?.join(", ") ?? ""}
-                            @input=${this.#onPropertyEditorUisChange}
-                            placeholder="Any property editor"
+                                slot="editor"
+                                .value=${this.rule.documentTypeAliases?.join(", ") ?? ""}
+                                @input=${this.#onDocumentTypeAliasesChange}
+                                placeholder="Any document type"
                         ></uui-input>
                     </umb-property-layout>
 
@@ -325,17 +326,17 @@ export class UaiScopeRuleEditorElement extends UmbLitElement {
                             placeholder="Any property"
                         ></uui-input>
                     </umb-property-layout>
-
+                    
                     <umb-property-layout
-                        label="Document Type Aliases"
-                        description="Comma-separated list (e.g., article, blogPost). Empty = any."
-                        orientation="vertical"
+                            label="Property Editor UIs"
+                            description="Comma-separated list (e.g., Umb.PropertyEditorUi.TextBox). Empty = any."
+                            orientation="vertical"
                     >
                         <uui-input
-                            slot="editor"
-                            .value=${this.rule.documentTypeAliases?.join(", ") ?? ""}
-                            @input=${this.#onDocumentTypeAliasesChange}
-                            placeholder="Any document type"
+                                slot="editor"
+                                .value=${this.rule.propertyEditorUiAliases?.join(", ") ?? ""}
+                                @input=${this.#onPropertyEditorUisChange}
+                                placeholder="Any property editor"
                         ></uui-input>
                     </umb-property-layout>
                 </div>
