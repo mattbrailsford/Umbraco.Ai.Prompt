@@ -208,6 +208,7 @@ export class UaiScopeRuleEditorElement extends UmbLitElement {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
+                line-height: 1;
             }
 
             .rule-content {
