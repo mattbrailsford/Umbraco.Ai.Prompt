@@ -83,8 +83,7 @@ export class UaiPromptScopeCondition
         const context: PropertyActionContext = {
             propertyEditorUiAlias: this.#propertyEditorUiAlias,
             propertyAlias: this.#propertyAlias,
-            // Use the first content type alias (typically the main document type)
-            documentTypeAlias: this.#documentTypeAliases.length > 0 ? this.#documentTypeAliases[0] : null,
+            documentTypeAliases: this.#documentTypeAliases,
         };
 
         this.permitted = shouldShowPrompt(this.config.scope, context);

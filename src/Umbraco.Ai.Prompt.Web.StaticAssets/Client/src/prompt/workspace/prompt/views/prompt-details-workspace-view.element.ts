@@ -5,13 +5,28 @@ import type { UaiSelectedEvent } from "@umbraco-ai/core";
 import { UaiPartialUpdateCommand, UAI_EMPTY_GUID } from "@umbraco-ai/core";
 import "@umbraco-ai/core";
 import type { UaiPromptDetailModel } from "../../../types.js";
+import type { UaiPromptScope, UaiScopeRule } from "../../../property-actions/types.js";
+import { TEXT_BASED_PROPERTY_EDITOR_UIS } from "../../../property-actions/constants.js";
 import { UAI_PROMPT_WORKSPACE_CONTEXT } from "../prompt-workspace.context-token.js";
-import "./scope-editor.element.js";
-import type { UaiScopeChangeEvent } from "./scope-editor.element.js";
+import "../../../components/scope-rules-editor/scope-rules-editor.element.js";
+
+/**
+ * Creates a default scope with one include rule for all text-based editors.
+ */
+function createDefaultScope(): UaiPromptScope {
+    return {
+        includeRules: [{
+            propertyEditorUiAliases: [...TEXT_BASED_PROPERTY_EDITOR_UIS],
+            propertyAliases: null,
+            documentTypeAliases: null,
+        }],
+        excludeRules: [],
+    };
+}
 
 /**
  * Workspace view for Prompt details.
- * Displays content, description, tags, and status.
+ * Displays content, description, scope configuration, tags, and status.
  */
 @customElement("uai-prompt-details-workspace-view")
 export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
@@ -30,6 +45,10 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                 });
             }
         });
+    }
+
+    #getScope(): UaiPromptScope {
+        return this._model?.scope ?? createDefaultScope();
     }
 
     #onDescriptionChange(event: Event) {
@@ -63,11 +82,28 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
         );
     }
 
-    #onScopeChange(event: UaiScopeChangeEvent) {
-        event.stopPropagation();
+    #updateScope(scope: UaiPromptScope) {
         this.#workspaceContext?.handleCommand(
-            new UaiPartialUpdateCommand<UaiPromptDetailModel>({ scope: event.scope }, "scope")
+            new UaiPartialUpdateCommand<UaiPromptDetailModel>({ scope }, "scope")
         );
+    }
+
+    #onIncludeRulesChange(event: CustomEvent<UaiScopeRule[]>) {
+        event.stopPropagation();
+        const scope = this.#getScope();
+        this.#updateScope({
+            ...scope,
+            includeRules: event.detail,
+        });
+    }
+
+    #onExcludeRulesChange(event: CustomEvent<UaiScopeRule[]>) {
+        event.stopPropagation();
+        const scope = this.#getScope();
+        this.#updateScope({
+            ...scope,
+            excludeRules: event.detail,
+        });
     }
 
     render() {
@@ -84,17 +120,19 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
     #renderLeftColumn() {
         if (!this._model) return html`<uui-loader></uui-loader>`;
 
+        const scope = this.#getScope();
+
         return html`
-            <uui-box headline="Prompt Configuration">
+            <uui-box headline="General">
                 <umb-property-layout label="AI Profile" description="Optional AI profile this prompt is designed for">
                     <uai-profile-picker
-                            slot="editor"
-                            .value=${this._model.profileId ?? undefined}
-                            placeholder="-- No Profile --"
-                            @selected=${this.#onProfileChange}
+                        slot="editor"
+                        .value=${this._model.profileId ?? undefined}
+                        placeholder="-- No Profile --"
+                        @selected=${this.#onProfileChange}
                     ></uai-profile-picker>
                 </umb-property-layout>
-                
+
                 <umb-property-layout label="Description" description="Brief description of this prompt">
                     <uui-input
                         slot="editor"
@@ -115,16 +153,29 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                 </umb-property-layout>
             </uui-box>
 
-            <uui-box headline="Scope Configuration">
+            <uui-box headline="Visibility">
                 <umb-property-layout
-                    label="Visibility Scope"
-                    description="Configure where this prompt appears as a property action"
+                    label="Show"
+                    description="Prompt appears where ANY rule matches (OR logic between rules)"
                 >
-                    <uai-scope-editor
+                    <uai-scope-rules-editor
                         slot="editor"
-                        .scope=${this._model.scope}
-                        @scope-change=${this.#onScopeChange}
-                    ></uai-scope-editor>
+                        .rules=${scope.includeRules}
+                        addButtonLabel="Add Include Rule"
+                        @rules-change=${this.#onIncludeRulesChange}
+                    ></uai-scope-rules-editor>
+                </umb-property-layout>
+
+                <umb-property-layout
+                    label="Hide"
+                    description="Prompt is hidden where ANY rule matches (overrides includes)"
+                >
+                    <uai-scope-rules-editor
+                        slot="editor"
+                        .rules=${scope.excludeRules}
+                        addButtonLabel="Add Exclude Rule"
+                        @rules-change=${this.#onExcludeRulesChange}
+                    ></uai-scope-rules-editor>
                 </umb-property-layout>
             </uui-box>
 
@@ -192,6 +243,10 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
             }
             uui-box:not(:first-child) {
                 margin-top: var(--uui-size-layout-1);
+            }
+
+            .exclude-box {
+                --uui-box-header-color: var(--uui-color-danger);
             }
 
             uui-input,

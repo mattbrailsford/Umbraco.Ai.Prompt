@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreatePromptData, CreatePromptErrors, CreatePromptResponses, DeletePromptData, DeletePromptErrors, DeletePromptResponses, GetAllPromptsData, GetAllPromptsErrors, GetAllPromptsResponses, GetPromptByIdOrAliasData, GetPromptByIdOrAliasErrors, GetPromptByIdOrAliasResponses, UpdatePromptData, UpdatePromptErrors, UpdatePromptResponses } from './types.gen';
+import type { CreatePromptData, CreatePromptErrors, CreatePromptResponses, DeletePromptData, DeletePromptErrors, DeletePromptResponses, GetAllPromptsData, GetAllPromptsErrors, GetAllPromptsResponses, GetDocumentTypeAliasesData, GetDocumentTypeAliasesErrors, GetDocumentTypeAliasesResponses, GetPromptByIdOrAliasData, GetPromptByIdOrAliasErrors, GetPromptByIdOrAliasResponses, GetPropertyAliasesData, GetPropertyAliasesErrors, GetPropertyAliasesResponses, UpdatePromptData, UpdatePromptErrors, UpdatePromptResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -89,6 +89,34 @@ export class PromptsService {
                 'Content-Type': 'application/json',
                 ...options.headers
             }
+        });
+    }
+}
+
+export class UtilsService {
+    public static getDocumentTypeAliases<ThrowOnError extends boolean = false>(options?: Options<GetDocumentTypeAliasesData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetDocumentTypeAliasesResponses, GetDocumentTypeAliasesErrors, ThrowOnError>({
+            security: [
+                {
+                    scheme: 'bearer',
+                    type: 'http'
+                }
+            ],
+            url: '/umbraco/ai/management/api/v1/utils/document-type-aliases',
+            ...options
+        });
+    }
+    
+    public static getPropertyAliases<ThrowOnError extends boolean = false>(options?: Options<GetPropertyAliasesData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetPropertyAliasesResponses, GetPropertyAliasesErrors, ThrowOnError>({
+            security: [
+                {
+                    scheme: 'bearer',
+                    type: 'http'
+                }
+            ],
+            url: '/umbraco/ai/management/api/v1/utils/property-aliases',
+            ...options
         });
     }
 }

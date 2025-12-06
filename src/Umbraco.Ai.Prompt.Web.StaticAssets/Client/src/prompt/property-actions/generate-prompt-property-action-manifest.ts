@@ -65,7 +65,7 @@ export function generatePromptPropertyActionManifest(
         api: () => import('./prompt-insert.property-action.js'),
         weight,
         meta: {
-            icon: UAI_PROMPT_ICON,
+            icon: "icon-wand",
             label: prompt.name,
             promptUnique: prompt.unique,
             promptAlias: prompt.alias,

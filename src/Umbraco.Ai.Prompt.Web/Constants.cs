@@ -47,6 +47,22 @@ public class Constants
                 /// </summary>
                 public const string GroupName = "Prompts";
             }
+
+            /// <summary>
+            /// Utils feature constants.
+            /// </summary>
+            public static class Utils
+            {
+                /// <summary>
+                /// Route segment for utils endpoints.
+                /// </summary>
+                public const string RouteSegment = "utils";
+
+                /// <summary>
+                /// Swagger group name for utils endpoints.
+                /// </summary>
+                public const string GroupName = "Utils";
+            }
         }
     }
 }
