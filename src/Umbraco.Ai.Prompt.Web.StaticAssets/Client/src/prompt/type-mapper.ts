@@ -1,21 +1,21 @@
-import type { PromptResponseModel, PromptItemResponseModel, ScopeModel } from "../api/types.gen.js";
+import type { PromptResponseModel, PromptItemResponseModel, VisibilityModel } from "../api/types.gen.js";
 import { UAI_PROMPT_ENTITY_TYPE } from "./constants.js";
-import type { UaiPromptScope, UaiScopeRule } from "./property-actions/types.js";
+import type { UaiPromptVisibility, UaiVisibilityRule } from "./property-actions/types.js";
 import type { UaiPromptDetailModel, UaiPromptItemModel } from "./types.js";
 
 /**
- * Maps API scope model to internal scope model.
+ * Maps API visibility model to internal visibility model.
  */
-function mapScopeFromApi(apiScope: ScopeModel | null | undefined): UaiPromptScope | null {
-    if (!apiScope) return null;
+function mapVisibilityFromApi(apiVisibility: VisibilityModel | null | undefined): UaiPromptVisibility | null {
+    if (!apiVisibility) return null;
 
     return {
-        includeRules: (apiScope.includeRules ?? []).map(mapRuleFromApi),
-        excludeRules: (apiScope.excludeRules ?? []).map(mapRuleFromApi),
+        showRules: (apiVisibility.showRules ?? []).map(mapVisibilityRuleFromApi),
+        hideRules: (apiVisibility.hideRules ?? []).map(mapVisibilityRuleFromApi),
     };
 }
 
-function mapRuleFromApi(rule: { propertyEditorUiAliases?: string[] | null; propertyAliases?: string[] | null; documentTypeAliases?: string[] | null }): UaiScopeRule {
+function mapVisibilityRuleFromApi(rule: { propertyEditorUiAliases?: string[] | null; propertyAliases?: string[] | null; documentTypeAliases?: string[] | null }): UaiVisibilityRule {
     return {
         propertyEditorUiAliases: rule.propertyEditorUiAliases ?? null,
         propertyAliases: rule.propertyAliases ?? null,
@@ -24,18 +24,18 @@ function mapRuleFromApi(rule: { propertyEditorUiAliases?: string[] | null; prope
 }
 
 /**
- * Maps internal scope model to API scope model.
+ * Maps internal visibility model to API visibility model.
  */
-function mapScopeToApi(scope: UaiPromptScope | null): ScopeModel | null {
-    if (!scope) return null;
+function mapVisibilityToApi(visibility: UaiPromptVisibility | null): VisibilityModel | null {
+    if (!visibility) return null;
 
     return {
-        includeRules: scope.includeRules.map(rule => ({
+        showRules: visibility.showRules.map(rule => ({
             propertyEditorUiAliases: rule.propertyEditorUiAliases,
             propertyAliases: rule.propertyAliases,
             documentTypeAliases: rule.documentTypeAliases,
         })),
-        excludeRules: scope.excludeRules.map(rule => ({
+        hideRules: visibility.hideRules.map(rule => ({
             propertyEditorUiAliases: rule.propertyEditorUiAliases,
             propertyAliases: rule.propertyAliases,
             documentTypeAliases: rule.documentTypeAliases,
@@ -54,7 +54,7 @@ export const UaiPromptTypeMapper = {
             content: response.content,
             profileId: response.profileId ?? null,
             tags: response.tags ?? [],
-            scope: mapScopeFromApi(response.scope),
+            visibility: mapVisibilityFromApi(response.visibility),
             isActive: response.isActive,
         };
     },
@@ -78,7 +78,7 @@ export const UaiPromptTypeMapper = {
             description: model.description,
             profileId: model.profileId,
             tags: model.tags,
-            scope: mapScopeToApi(model.scope),
+            visibility: mapVisibilityToApi(model.visibility),
         };
     },
 
@@ -90,7 +90,7 @@ export const UaiPromptTypeMapper = {
             description: model.description,
             profileId: model.profileId,
             tags: model.tags,
-            scope: mapScopeToApi(model.scope),
+            visibility: mapVisibilityToApi(model.visibility),
             isActive: model.isActive,
         };
     },

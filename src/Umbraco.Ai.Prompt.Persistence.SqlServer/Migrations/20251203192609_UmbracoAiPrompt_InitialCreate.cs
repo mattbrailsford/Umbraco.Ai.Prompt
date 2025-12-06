@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -23,6 +23,7 @@ namespace Umbraco.Ai.Prompt.Persistence.SqlServer.Migrations
                     ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     TagsJson = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    VisibilityConfig = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

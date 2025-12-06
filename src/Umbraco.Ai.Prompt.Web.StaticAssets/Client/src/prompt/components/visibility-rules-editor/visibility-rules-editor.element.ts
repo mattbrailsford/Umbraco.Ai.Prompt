@@ -1,20 +1,20 @@
 import { css, html, customElement, property } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { UmbTextStyles } from "@umbraco-cms/backoffice/style";
-import type { UaiScopeRule } from "../../property-actions";
-import { createEmptyRule } from "./scope-rule-editor.element.js";
-import "./scope-rule-editor.element.js";
+import type { UaiVisibilityRule } from "../../property-actions/types.js";
+import { createEmptyRule } from "./visibility-rule-editor.element.js";
+import "./visibility-rule-editor.element.js";
 
 /**
- * Editor for managing a list of scope rules (include or exclude).
+ * Editor for managing a list of visibility rules (show or hide).
  * Handles adding, removing, and updating rules.
  *
  * @fires rules-change - Fires when the rules array changes
  */
-@customElement("uai-scope-rules-editor")
-export class UaiScopeRulesEditorElement extends UmbLitElement {
+@customElement("uai-visibility-rules-editor")
+export class UaiVisibilityRulesEditorElement extends UmbLitElement {
     @property({ type: Array })
-    rules: UaiScopeRule[] = [];
+    rules: UaiVisibilityRule[] = [];
 
     @property({ type: String })
     addButtonLabel = "Add Rule";
@@ -29,14 +29,14 @@ export class UaiScopeRulesEditorElement extends UmbLitElement {
         this.#dispatchChange(newRules);
     }
 
-    #onRuleChange(index: number, rule: UaiScopeRule) {
+    #onRuleChange(index: number, rule: UaiVisibilityRule) {
         const newRules = [...this.rules];
         newRules[index] = rule;
         this.#dispatchChange(newRules);
     }
 
-    #dispatchChange(rules: UaiScopeRule[]) {
-        this.dispatchEvent(new CustomEvent<UaiScopeRule[]>("rules-change", {
+    #dispatchChange(rules: UaiVisibilityRule[]) {
+        this.dispatchEvent(new CustomEvent<UaiVisibilityRule[]>("rules-change", {
             detail: rules,
             bubbles: true,
             composed: true,
@@ -47,11 +47,11 @@ export class UaiScopeRulesEditorElement extends UmbLitElement {
         return html`
             <div class="rules-container">
                 ${this.rules.map((rule, index) => html`
-                    <uai-scope-rule-editor
+                    <uai-visibility-rule-editor
                         .rule=${rule}
-                        @rule-change=${(e: CustomEvent<UaiScopeRule>) => this.#onRuleChange(index, e.detail)}
+                        @rule-change=${(e: CustomEvent<UaiVisibilityRule>) => this.#onRuleChange(index, e.detail)}
                         @remove=${() => this.#onRemoveRule(index)}
-                    ></uai-scope-rule-editor>
+                    ></uai-visibility-rule-editor>
                 `)}
                 <uui-button
                     look="placeholder"
@@ -84,10 +84,10 @@ export class UaiScopeRulesEditorElement extends UmbLitElement {
     ];
 }
 
-export default UaiScopeRulesEditorElement;
+export default UaiVisibilityRulesEditorElement;
 
 declare global {
     interface HTMLElementTagNameMap {
-        "uai-scope-rules-editor": UaiScopeRulesEditorElement;
+        "uai-visibility-rules-editor": UaiVisibilityRulesEditorElement;
     }
 }

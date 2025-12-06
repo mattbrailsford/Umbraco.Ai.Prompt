@@ -1,4 +1,4 @@
-import type { UaiPromptScope, UaiScopeRule } from './types.js';
+import type { UaiPromptVisibility, UaiVisibilityRule } from './types.js';
 
 /**
  * Context information available when determining if a prompt should appear.
@@ -16,34 +16,34 @@ export interface PropertyActionContext {
  * Determines if a prompt should appear for the given context.
  *
  * Logic:
- * - No scope or empty includeRules = don't show (scoped by default)
- * - If any excludeRule matches = don't show
- * - If any includeRule matches = show
+ * - No visibility or empty showRules = don't show (hidden by default)
+ * - If any hideRule matches = don't show
+ * - If any showRule matches = show
  */
 export function shouldShowPrompt(
-    scope: UaiPromptScope | null,
+    visibility: UaiPromptVisibility | null,
     context: PropertyActionContext
 ): boolean {
-    // No scope = doesn't appear anywhere (scoped by default)
-    if (!scope) {
+    // No visibility = doesn't appear anywhere (hidden by default)
+    if (!visibility) {
         return false;
     }
 
-    // No include rules = doesn't appear anywhere
-    if (scope.includeRules.length === 0) {
+    // No show rules = doesn't appear anywhere
+    if (visibility.showRules.length === 0) {
         return false;
     }
 
-    // Check exclusions first (exclusions take precedence)
-    if (scope.excludeRules.length > 0) {
-        const isExcluded = scope.excludeRules.some((ruleSet) => matchesRule(ruleSet, context));
-        if (isExcluded) {
+    // Check hide rules first (hide takes precedence)
+    if (visibility.hideRules.length > 0) {
+        const isHidden = visibility.hideRules.some((ruleSet) => matchesRule(ruleSet, context));
+        if (isHidden) {
             return false;
         }
     }
 
-    // Check inclusions (OR logic between rules)
-    return scope.includeRules.some((rule) => matchesRule(rule, context));
+    // Check show rules (OR logic between rules)
+    return visibility.showRules.some((rule) => matchesRule(rule, context));
 }
 
 /**
@@ -51,7 +51,7 @@ export function shouldShowPrompt(
  * All non-null/non-empty properties must match (AND logic between properties).
  * For array properties, any value matching = that property matches (OR within array).
  */
-function matchesRule(rule: UaiScopeRule, context: PropertyActionContext): boolean {
+function matchesRule(rule: UaiVisibilityRule, context: PropertyActionContext): boolean {
     // Check property editor UI alias
     if (rule.propertyEditorUiAliases && rule.propertyEditorUiAliases.length > 0) {
         if (!rule.propertyEditorUiAliases.includes(context.propertyEditorUiAlias)) {

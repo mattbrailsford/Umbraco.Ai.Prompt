@@ -1,9 +1,9 @@
 /**
- * A single scope rule that determines where a prompt can appear.
+ * A single visibility rule that determines where a prompt can appear.
  * All non-null properties use AND logic between them.
  * Values within each array use OR logic.
  */
-export interface UaiScopeRule {
+export interface UaiVisibilityRule {
     /** Property Editor UI aliases to match (OR within array). Null/empty = any. */
     propertyEditorUiAliases: string[] | null;
     /** Property aliases to match (OR within array). Null/empty = any. */
@@ -13,13 +13,13 @@ export interface UaiScopeRule {
 }
 
 /**
- * Scope configuration defining where a prompt appears.
+ * Visibility configuration defining where a prompt appears.
  */
-export interface UaiPromptScope {
+export interface UaiPromptVisibility {
     /** Rules that define where the prompt should appear (OR between rules). */
-    includeRules: UaiScopeRule[];
+    showRules: UaiVisibilityRule[];
     /** Rules that define where the prompt should NOT appear (OR between rules). */
-    excludeRules: UaiScopeRule[];
+    hideRules: UaiVisibilityRule[];
 }
 
 /**
@@ -32,7 +32,7 @@ export interface UaiPromptRegistrationModel {
     description: string | null;
     content: string;
     profileId: string | null;
-    scope: UaiPromptScope | null;
+    visibility: UaiPromptVisibility | null;
 }
 
 /**
@@ -44,7 +44,7 @@ export interface UaiPromptPropertyActionMeta {
     label: string;
     promptUnique: string;
     promptDescription: string | null;
-    promptScope: UaiPromptScope | null;
+    promptVisibility: UaiPromptVisibility | null;
 }
 
 /**

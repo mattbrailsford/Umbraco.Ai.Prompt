@@ -5,28 +5,28 @@ import type { UaiSelectedEvent } from "@umbraco-ai/core";
 import { UaiPartialUpdateCommand, UAI_EMPTY_GUID } from "@umbraco-ai/core";
 import "@umbraco-ai/core";
 import type { UaiPromptDetailModel } from "../../../types.js";
-import type { UaiPromptScope, UaiScopeRule } from "../../../property-actions/types.js";
+import type { UaiPromptVisibility, UaiVisibilityRule } from "../../../property-actions/types.js";
 import { TEXT_BASED_PROPERTY_EDITOR_UIS } from "../../../property-actions/constants.js";
 import { UAI_PROMPT_WORKSPACE_CONTEXT } from "../prompt-workspace.context-token.js";
-import "../../../components/scope-rules-editor/scope-rules-editor.element.js";
+import "../../../components/visibility-rules-editor/visibility-rules-editor.element.js";
 
 /**
- * Creates a default scope with one include rule for all text-based editors.
+ * Creates a default visibility with one show rule for all text-based editors.
  */
-function createDefaultScope(): UaiPromptScope {
+function createDefaultVisibility(): UaiPromptVisibility {
     return {
-        includeRules: [{
+        showRules: [{
             propertyEditorUiAliases: [...TEXT_BASED_PROPERTY_EDITOR_UIS],
             propertyAliases: null,
             documentTypeAliases: null,
         }],
-        excludeRules: [],
+        hideRules: [],
     };
 }
 
 /**
  * Workspace view for Prompt details.
- * Displays content, description, scope configuration, tags, and status.
+ * Displays content, description, visibility configuration, tags, and status.
  */
 @customElement("uai-prompt-details-workspace-view")
 export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
@@ -47,8 +47,8 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
         });
     }
 
-    #getScope(): UaiPromptScope {
-        return this._model?.scope ?? createDefaultScope();
+    #getVisibility(): UaiPromptVisibility {
+        return this._model?.visibility ?? createDefaultVisibility();
     }
 
     #onDescriptionChange(event: Event) {
@@ -82,27 +82,27 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
         );
     }
 
-    #updateScope(scope: UaiPromptScope) {
+    #updateVisibility(visibility: UaiPromptVisibility) {
         this.#workspaceContext?.handleCommand(
-            new UaiPartialUpdateCommand<UaiPromptDetailModel>({ scope }, "scope")
+            new UaiPartialUpdateCommand<UaiPromptDetailModel>({ visibility }, "visibility")
         );
     }
 
-    #onIncludeRulesChange(event: CustomEvent<UaiScopeRule[]>) {
+    #onShowRulesChange(event: CustomEvent<UaiVisibilityRule[]>) {
         event.stopPropagation();
-        const scope = this.#getScope();
-        this.#updateScope({
-            ...scope,
-            includeRules: event.detail,
+        const visibility = this.#getVisibility();
+        this.#updateVisibility({
+            ...visibility,
+            showRules: event.detail,
         });
     }
 
-    #onExcludeRulesChange(event: CustomEvent<UaiScopeRule[]>) {
+    #onHideRulesChange(event: CustomEvent<UaiVisibilityRule[]>) {
         event.stopPropagation();
-        const scope = this.#getScope();
-        this.#updateScope({
-            ...scope,
-            excludeRules: event.detail,
+        const visibility = this.#getVisibility();
+        this.#updateVisibility({
+            ...visibility,
+            hideRules: event.detail,
         });
     }
 
@@ -120,7 +120,7 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
     #renderLeftColumn() {
         if (!this._model) return html`<uui-loader></uui-loader>`;
 
-        const scope = this.#getScope();
+        const visibility = this.#getVisibility();
 
         return html`
             <uui-box headline="General">
@@ -158,24 +158,24 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                     label="Show"
                     description="Prompt appears where ANY rule matches (OR logic between rules)"
                 >
-                    <uai-scope-rules-editor
+                    <uai-visibility-rules-editor
                         slot="editor"
-                        .rules=${scope.includeRules}
-                        addButtonLabel="Add Include Rule"
-                        @rules-change=${this.#onIncludeRulesChange}
-                    ></uai-scope-rules-editor>
+                        .rules=${visibility.showRules}
+                        addButtonLabel="Add Show Rule"
+                        @rules-change=${this.#onShowRulesChange}
+                    ></uai-visibility-rules-editor>
                 </umb-property-layout>
 
                 <umb-property-layout
                     label="Hide"
-                    description="Prompt is hidden where ANY rule matches (overrides includes)"
+                    description="Prompt is hidden where ANY rule matches (overrides show rules)"
                 >
-                    <uai-scope-rules-editor
+                    <uai-visibility-rules-editor
                         slot="editor"
-                        .rules=${scope.excludeRules}
-                        addButtonLabel="Add Exclude Rule"
-                        @rules-change=${this.#onExcludeRulesChange}
-                    ></uai-scope-rules-editor>
+                        .rules=${visibility.hideRules}
+                        addButtonLabel="Add Hide Rule"
+                        @rules-change=${this.#onHideRulesChange}
+                    ></uai-visibility-rules-editor>
                 </umb-property-layout>
             </uui-box>
 
@@ -245,7 +245,7 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                 margin-top: var(--uui-size-layout-1);
             }
 
-            .exclude-box {
+            .hide-box {
                 --uui-box-header-color: var(--uui-color-danger);
             }
 

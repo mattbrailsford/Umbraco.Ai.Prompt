@@ -1,28 +1,31 @@
-namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Models;
+namespace Umbraco.Ai.Prompt.Core.Prompts;
 
 /// <summary>
-/// API model for a scope rule that determines where a prompt can appear.
+/// Defines a single visibility rule that determines where a prompt can appear.
+/// All non-null properties use AND logic between them.
+/// Values within each array use OR logic.
 /// </summary>
-public class ScopeRuleModel
+public class AiPromptVisibilityRule
 {
     /// <summary>
     /// Property Editor UI aliases to match (e.g., 'Umb.PropertyEditorUi.TextBox').
     /// If any value matches the current property editor UI, this constraint is satisfied.
     /// Null or empty means any property editor UI.
     /// </summary>
-    public IEnumerable<string>? PropertyEditorUiAliases { get; set; }
+    public IReadOnlyList<string>? PropertyEditorUiAliases { get; set; }
 
     /// <summary>
     /// Property aliases to match (e.g., 'pageTitle', 'description').
     /// If any value matches the current property alias, this constraint is satisfied.
     /// Null or empty means any property.
     /// </summary>
-    public IEnumerable<string>? PropertyAliases { get; set; }
+    public IReadOnlyList<string>? PropertyAliases { get; set; }
 
     /// <summary>
     /// Document type aliases to match (e.g., 'article', 'blogPost').
     /// If any value matches the current document type, this constraint is satisfied.
     /// Null or empty means any document type.
+    /// When specified, property constraints only apply to these document types.
     /// </summary>
-    public IEnumerable<string>? DocumentTypeAliases { get; set; }
+    public IReadOnlyList<string>? DocumentTypeAliases { get; set; }
 }
