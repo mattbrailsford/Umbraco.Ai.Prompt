@@ -23,6 +23,7 @@ export class UaiPromptCollectionServerDataSource implements UmbCollectionDataSou
             this.#host,
             PromptsService.getAllPrompts({
                 query: {
+                    filter: filter.filter,
                     skip: filter.skip ?? 0,
                     take: filter.take ?? 100,
                 },
