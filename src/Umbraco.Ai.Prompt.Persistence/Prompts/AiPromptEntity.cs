@@ -48,7 +48,7 @@ public class AiPromptEntity
     /// <summary>
     /// JSON-serialized visibility configuration.
     /// </summary>
-    public string? VisibilityJson { get; set; }
+    public string? VisibilityConfig { get; set; }
 
     /// <summary>
     /// Creation timestamp.
