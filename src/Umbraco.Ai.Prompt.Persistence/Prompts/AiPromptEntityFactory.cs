@@ -19,7 +19,7 @@ internal static class AiPromptEntityFactory
     public static Core.Prompts.AiPrompt BuildDomain(AiPromptEntity entity)
     {
         var tags = DeserializeTags(entity.Tags);
-        var visibility = DeserializeVisibility(entity.VisibilityConfig);
+        var visibility = DeserializeVisibility(entity.Visibility);
 
         return new Core.Prompts.AiPrompt
         {
@@ -52,7 +52,7 @@ internal static class AiPromptEntityFactory
             ProfileId = aiPrompt.ProfileId,
             Tags = SerializeTags(aiPrompt.Tags),
             IsActive = aiPrompt.IsActive,
-            VisibilityConfig = SerializeVisibility(aiPrompt.Visibility),
+            Visibility = SerializeVisibility(aiPrompt.Visibility),
             DateCreated = aiPrompt.DateCreated,
             DateModified = aiPrompt.DateModified
         };
@@ -70,7 +70,7 @@ internal static class AiPromptEntityFactory
         entity.ProfileId = aiPrompt.ProfileId;
         entity.Tags = SerializeTags(aiPrompt.Tags);
         entity.IsActive = aiPrompt.IsActive;
-        entity.VisibilityConfig = SerializeVisibility(aiPrompt.Visibility);
+        entity.Visibility = SerializeVisibility(aiPrompt.Visibility);
         entity.DateModified = aiPrompt.DateModified;
     }
 

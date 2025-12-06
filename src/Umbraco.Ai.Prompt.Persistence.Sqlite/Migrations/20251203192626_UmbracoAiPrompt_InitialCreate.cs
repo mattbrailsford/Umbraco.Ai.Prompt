@@ -23,7 +23,7 @@ namespace Umbraco.Ai.Prompt.Persistence.Sqlite.Migrations
                     ProfileId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Tags = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true),
-                    VisibilityConfig = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: true),
+                    Visibility = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: true),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DateModified = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },

@@ -63,11 +63,11 @@ namespace Umbraco.Ai.Prompt.Persistence.SqlServer.Migrations
                     b.Property<Guid?>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("VisibilityConfig")
+                    b.Property<string>("Visibility")
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
 
-                    b.Property<string>("TagsJson")
+                    b.Property<string>("Tags")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 

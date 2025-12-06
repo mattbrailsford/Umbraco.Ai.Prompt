@@ -55,11 +55,11 @@ namespace Umbraco.Ai.Prompt.Persistence.Sqlite.Migrations
                     b.Property<Guid?>("ProfileId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("VisibilityConfig")
+                    b.Property<string>("Visibility")
                         .HasMaxLength(4000)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("TagsJson")
+                    b.Property<string>("Tags")
                         .HasMaxLength(2000)
                         .HasColumnType("TEXT");
 
