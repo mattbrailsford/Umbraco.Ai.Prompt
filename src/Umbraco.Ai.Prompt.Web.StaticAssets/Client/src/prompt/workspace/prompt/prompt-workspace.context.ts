@@ -10,11 +10,12 @@ import { UmbBasicState, UmbObjectState } from "@umbraco-cms/backoffice/observabl
 import { UmbEntityContext } from "@umbraco-cms/backoffice/entity";
 import { UmbValidationContext } from "@umbraco-cms/backoffice/validation";
 import type { UaiCommand } from "@umbraco-ai/core";
-import { UaiCommandStore, UAI_EMPTY_GUID } from "@umbraco-ai/core";
+import { UaiCommandStore, UAI_EMPTY_GUID, UaiEntityDeletedRedirectController } from "@umbraco-ai/core";
 import { UaiPromptDetailRepository } from "../../repository/detail/prompt-detail.repository.js";
 import { UAI_PROMPT_WORKSPACE_ALIAS, UAI_PROMPT_ENTITY_TYPE } from "../../constants.js";
 import type { UaiPromptDetailModel } from "../../types.js";
 import { UaiPromptWorkspaceEditorElement } from "./prompt-workspace-editor.element.js";
+import { UAI_PROMPT_ROOT_WORKSPACE_PATH } from "../prompt-root/paths.js";
 
 /**
  * Workspace context for editing Prompt entities.
@@ -45,6 +46,13 @@ export class UaiPromptWorkspaceContext
 
         this.#entityContext.setEntityType(UAI_PROMPT_ENTITY_TYPE);
         this.observe(this.unique, (unique) => this.#entityContext.setUnique(unique ?? null));
+
+        // Redirect to collection when entity is deleted
+        new UaiEntityDeletedRedirectController(this, {
+            getUnique: () => this.getUnique(),
+            getEntityType: () => this.getEntityType(),
+            collectionPath: UAI_PROMPT_ROOT_WORKSPACE_PATH,
+        });
 
         this.routes.setRoutes([
             {

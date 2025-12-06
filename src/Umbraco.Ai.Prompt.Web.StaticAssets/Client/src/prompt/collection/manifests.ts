@@ -1,6 +1,7 @@
 import { UAI_PROMPT_COLLECTION_ALIAS } from "./constants.js";
 import { UAI_PROMPT_COLLECTION_REPOSITORY_ALIAS } from "../repository/constants.js";
 import { promptCollectionActionManifests } from "./action/manifests.js";
+import { promptBulkActionManifests } from "./bulk-action/manifests.js";
 
 export const promptCollectionManifests: Array<UmbExtensionManifest> = [
     {
@@ -26,4 +27,5 @@ export const promptCollectionManifests: Array<UmbExtensionManifest> = [
         conditions: [{ alias: "Umb.Condition.CollectionAlias", match: UAI_PROMPT_COLLECTION_ALIAS }],
     },
     ...promptCollectionActionManifests,
+    ...promptBulkActionManifests,
 ];
