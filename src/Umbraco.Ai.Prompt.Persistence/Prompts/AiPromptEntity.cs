@@ -36,9 +36,9 @@ public class AiPromptEntity
     public Guid? ProfileId { get; set; }
 
     /// <summary>
-    /// JSON-serialized tags array.
+    /// Tags array serialized as a comma-separated string.
     /// </summary>
-    public string? TagsJson { get; set; }
+    public string? Tags { get; set; }
 
     /// <summary>
     /// Whether the prompt is active.

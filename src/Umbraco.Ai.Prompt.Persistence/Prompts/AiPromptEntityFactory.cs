@@ -18,7 +18,7 @@ internal static class AiPromptEntityFactory
     /// </summary>
     public static Core.Prompts.AiPrompt BuildDomain(AiPromptEntity entity)
     {
-        var tags = DeserializeTags(entity.TagsJson);
+        var tags = DeserializeTags(entity.Tags);
         var visibility = DeserializeVisibility(entity.VisibilityConfig);
 
         return new Core.Prompts.AiPrompt
@@ -50,7 +50,7 @@ internal static class AiPromptEntityFactory
             Description = aiPrompt.Description,
             Content = aiPrompt.Content,
             ProfileId = aiPrompt.ProfileId,
-            TagsJson = SerializeTags(aiPrompt.Tags),
+            Tags = SerializeTags(aiPrompt.Tags),
             IsActive = aiPrompt.IsActive,
             VisibilityConfig = SerializeVisibility(aiPrompt.Visibility),
             DateCreated = aiPrompt.DateCreated,
@@ -68,7 +68,7 @@ internal static class AiPromptEntityFactory
         entity.Description = aiPrompt.Description;
         entity.Content = aiPrompt.Content;
         entity.ProfileId = aiPrompt.ProfileId;
-        entity.TagsJson = SerializeTags(aiPrompt.Tags);
+        entity.Tags = SerializeTags(aiPrompt.Tags);
         entity.IsActive = aiPrompt.IsActive;
         entity.VisibilityConfig = SerializeVisibility(aiPrompt.Visibility);
         entity.DateModified = aiPrompt.DateModified;
@@ -76,29 +76,12 @@ internal static class AiPromptEntityFactory
 
     private static string? SerializeTags(IReadOnlyList<string> tags)
     {
-        if (tags.Count == 0)
-        {
-            return null;
-        }
-
-        return JsonSerializer.Serialize(tags, JsonOptions);
+        return tags.Count == 0 ? null : string.Join(',', tags);
     }
 
-    private static IReadOnlyList<string> DeserializeTags(string? json)
+    private static IReadOnlyList<string> DeserializeTags(string? tags)
     {
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            return [];
-        }
-
-        try
-        {
-            return JsonSerializer.Deserialize<List<string>>(json, JsonOptions) ?? [];
-        }
-        catch
-        {
-            return [];
-        }
+        return string.IsNullOrWhiteSpace(tags) ? [] : tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
     private static string? SerializeVisibility(AiPromptVisibility? visibility)

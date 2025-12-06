@@ -47,7 +47,7 @@ public class UmbracoAiPromptDbContext : DbContext
 
             entity.Property(e => e.ProfileId);
 
-            entity.Property(e => e.TagsJson)
+            entity.Property(e => e.Tags)
                 .HasMaxLength(2000);
 
             entity.Property(e => e.IsActive)
