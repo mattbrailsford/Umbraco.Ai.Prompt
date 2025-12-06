@@ -37,26 +37,30 @@ export interface UaiPromptRegistrationModel {
 
 /**
  * Meta data passed to the prompt property action.
+ * Simplified to only include data needed for property action display and execution.
  */
 export interface UaiPromptPropertyActionMeta {
     icon: string;
     label: string;
     promptUnique: string;
-    promptAlias: string;
-    promptContent: string;
     promptDescription: string | null;
-    promptProfileId: string | null;
     promptScope: UaiPromptScope | null;
 }
 
 /**
  * Data passed to the prompt preview modal.
+ * Contains entity context for server-side execution.
  */
 export interface UaiPromptPreviewModalData {
+    promptUnique: string;
     promptName: string;
     promptDescription: string | null;
-    promptContent: string;
-    promptProfileId: string | null;
+    // Entity context for execution
+    entityId?: string;
+    entityType?: string;
+    propertyAlias?: string;
+    culture?: string;
+    segment?: string;
 }
 
 /**
