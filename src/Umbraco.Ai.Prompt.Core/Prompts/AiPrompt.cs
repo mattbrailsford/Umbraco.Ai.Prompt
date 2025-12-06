@@ -3,12 +3,12 @@ namespace Umbraco.Ai.Prompt.Core.Prompts;
 /// <summary>
 /// Represents a stored prompt template that can be linked to AI profiles.
 /// </summary>
-public class AiPrompt
+public sealed class AiPrompt
 {
     /// <summary>
     /// Unique identifier for the prompt.
     /// </summary>
-    public required Guid Id { get; init; }
+    public Guid Id { get; internal set; }
 
     /// <summary>
     /// Unique alias for the prompt (URL-safe identifier).

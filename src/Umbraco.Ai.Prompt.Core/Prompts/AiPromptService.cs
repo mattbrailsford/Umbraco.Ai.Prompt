@@ -55,19 +55,7 @@ internal sealed class AiPromptService : IAiPromptService
         // Generate new ID if needed
         if (prompt.Id == Guid.Empty)
         {
-            prompt = new AiPrompt
-            {
-                Id = Guid.NewGuid(),
-                Alias = prompt.Alias,
-                Name = prompt.Name,
-                Content = prompt.Content,
-                Description = prompt.Description,
-                ProfileId = prompt.ProfileId,
-                Tags = prompt.Tags,
-                IsActive = prompt.IsActive,
-                DateCreated = prompt.DateCreated,
-                DateModified = prompt.DateModified
-            };
+            prompt.Id = Guid.NewGuid();
         }
 
         // Check for alias uniqueness
