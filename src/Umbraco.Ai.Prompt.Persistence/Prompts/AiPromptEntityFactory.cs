@@ -19,7 +19,7 @@ internal static class AiPromptEntityFactory
     public static Core.Prompts.AiPrompt BuildDomain(AiPromptEntity entity)
     {
         var tags = DeserializeTags(entity.TagsJson);
-        var scope = DeserializeScope(entity.ScopeJson);
+        var visibility = DeserializeVisibility(entity.VisibilityJson);
 
         return new Core.Prompts.AiPrompt
         {
@@ -31,7 +31,7 @@ internal static class AiPromptEntityFactory
             ProfileId = entity.ProfileId,
             Tags = tags,
             IsActive = entity.IsActive,
-            Scope = scope,
+            Visibility = visibility,
             DateCreated = entity.DateCreated,
             DateModified = entity.DateModified
         };
@@ -52,7 +52,7 @@ internal static class AiPromptEntityFactory
             ProfileId = aiPrompt.ProfileId,
             TagsJson = SerializeTags(aiPrompt.Tags),
             IsActive = aiPrompt.IsActive,
-            ScopeJson = SerializeScope(aiPrompt.Scope),
+            VisibilityJson = SerializeVisibility(aiPrompt.Visibility),
             DateCreated = aiPrompt.DateCreated,
             DateModified = aiPrompt.DateModified
         };
@@ -70,7 +70,7 @@ internal static class AiPromptEntityFactory
         entity.ProfileId = aiPrompt.ProfileId;
         entity.TagsJson = SerializeTags(aiPrompt.Tags);
         entity.IsActive = aiPrompt.IsActive;
-        entity.ScopeJson = SerializeScope(aiPrompt.Scope);
+        entity.VisibilityJson = SerializeVisibility(aiPrompt.Visibility);
         entity.DateModified = aiPrompt.DateModified;
     }
 
@@ -101,23 +101,23 @@ internal static class AiPromptEntityFactory
         }
     }
 
-    private static string? SerializeScope(AiPromptScope? scope)
+    private static string? SerializeVisibility(AiPromptVisibility? visibility)
     {
-        if (scope is null)
+        if (visibility is null)
         {
             return null;
         }
 
-        // Don't store empty scopes as JSON - treat as null
-        if (scope.IncludeRules.Count == 0 && scope.ExcludeRules.Count == 0)
+        // Don't store empty visibility as JSON - treat as null
+        if (visibility.ShowRules.Count == 0 && visibility.HideRules.Count == 0)
         {
             return null;
         }
 
-        return JsonSerializer.Serialize(scope, JsonOptions);
+        return JsonSerializer.Serialize(visibility, JsonOptions);
     }
 
-    private static AiPromptScope? DeserializeScope(string? json)
+    private static AiPromptVisibility? DeserializeVisibility(string? json)
     {
         if (string.IsNullOrWhiteSpace(json))
         {
@@ -126,7 +126,7 @@ internal static class AiPromptEntityFactory
 
         try
         {
-            return JsonSerializer.Deserialize<AiPromptScope>(json, JsonOptions);
+            return JsonSerializer.Deserialize<AiPromptVisibility>(json, JsonOptions);
         }
         catch
         {

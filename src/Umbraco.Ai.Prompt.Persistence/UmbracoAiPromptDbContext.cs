@@ -54,7 +54,7 @@ public class UmbracoAiPromptDbContext : DbContext
                 .IsRequired()
                 .HasDefaultValue(true);
 
-            entity.Property(e => e.ScopeJson)
+            entity.Property(e => e.VisibilityJson)
                 .HasMaxLength(4000);
 
             entity.Property(e => e.DateCreated)
