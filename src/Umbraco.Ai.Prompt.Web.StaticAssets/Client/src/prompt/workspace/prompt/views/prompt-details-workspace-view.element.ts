@@ -153,9 +153,9 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                 </umb-property-layout>
             </uui-box>
 
-            <uui-box headline="Visibility Rules">
+            <uui-box headline="Visibility">
                 <umb-property-layout
-                    label="Include"
+                    label="Show"
                     description="Prompt appears where ANY rule matches (OR logic between rules)"
                 >
                     <uai-scope-rules-editor
@@ -167,7 +167,7 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                 </umb-property-layout>
 
                 <umb-property-layout
-                    label="Exclude"
+                    label="Hide"
                     description="Prompt is hidden where ANY rule matches (overrides includes)"
                 >
                     <uai-scope-rules-editor
