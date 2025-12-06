@@ -1,25 +1,25 @@
 /**
- * A single visibility rule that determines where a prompt can appear.
+ * A single scope rule that determines where a prompt can run.
  * All non-null properties use AND logic between them.
  * Values within each array use OR logic.
  */
-export interface UaiVisibilityRule {
+export interface UaiScopeRule {
     /** Property Editor UI aliases to match (OR within array). Null/empty = any. */
     propertyEditorUiAliases: string[] | null;
     /** Property aliases to match (OR within array). Null/empty = any. */
     propertyAliases: string[] | null;
-    /** Document type aliases to match (OR within array). Null/empty = any. */
-    documentTypeAliases: string[] | null;
+    /** Content type aliases to match (OR within array). Null/empty = any. */
+    contentTypeAliases: string[] | null;
 }
 
 /**
- * Visibility configuration defining where a prompt appears.
+ * Scope configuration defining where a prompt can run.
  */
-export interface UaiPromptVisibility {
-    /** Rules that define where the prompt should appear (OR between rules). */
-    showRules: UaiVisibilityRule[];
-    /** Rules that define where the prompt should NOT appear (OR between rules). */
-    hideRules: UaiVisibilityRule[];
+export interface UaiPromptScope {
+    /** Rules that define where the prompt is allowed (OR between rules). */
+    allowRules: UaiScopeRule[];
+    /** Rules that define where the prompt is denied (OR between rules). */
+    denyRules: UaiScopeRule[];
 }
 
 /**
@@ -32,7 +32,7 @@ export interface UaiPromptRegistrationModel {
     description: string | null;
     content: string;
     profileId: string | null;
-    visibility: UaiPromptVisibility | null;
+    scope: UaiPromptScope | null;
 }
 
 /**
@@ -44,7 +44,7 @@ export interface UaiPromptPropertyActionMeta {
     label: string;
     promptUnique: string;
     promptDescription: string | null;
-    promptVisibility: UaiPromptVisibility | null;
+    promptScope: UaiPromptScope | null;
 }
 
 /**
@@ -55,10 +55,10 @@ export interface UaiPromptPreviewModalData {
     promptUnique: string;
     promptName: string;
     promptDescription: string | null;
-    // Entity context for execution
-    entityId?: string;
-    entityType?: string;
-    propertyAlias?: string;
+    // Entity context for execution (required for scope validation)
+    entityId: string;
+    entityType: string;
+    propertyAlias: string;
     culture?: string;
     segment?: string;
 }

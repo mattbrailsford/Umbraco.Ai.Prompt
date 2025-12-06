@@ -3,31 +3,31 @@ import { UMB_PROPERTY_STRUCTURE_WORKSPACE_CONTEXT } from '@umbraco-cms/backoffic
 import type { UmbControllerHost } from '@umbraco-cms/backoffice/controller-api';
 import type { UmbConditionConfigBase, UmbConditionControllerArguments, UmbExtensionCondition } from '@umbraco-cms/backoffice/extension-api';
 import { UmbConditionBase } from '@umbraco-cms/backoffice/extension-registry';
-import { shouldShowPrompt, type PropertyActionContext } from './prompt-visibility-matcher.js';
-import type { UaiPromptVisibility } from './types.js';
+import { isPromptAllowed, type PropertyActionContext } from './prompt-scope-matcher.js';
+import type { UaiPromptScope } from './types.js';
 
 /**
- * Condition configuration for prompt visibility filtering.
+ * Condition configuration for prompt scope filtering.
  */
-export interface UaiPromptVisibilityConditionConfig extends UmbConditionConfigBase {
-    visibility: UaiPromptVisibility | null;
+export interface UaiPromptScopeConditionConfig extends UmbConditionConfigBase {
+    scope: UaiPromptScope | null;
 }
 
 const PropertyContextSymbol = Symbol();
 const ContentTypeSymbol = Symbol();
 
 /**
- * Condition that determines if a prompt should appear based on its visibility configuration.
+ * Condition that determines if a prompt is allowed based on its scope configuration.
  */
-export class UaiPromptVisibilityCondition
-    extends UmbConditionBase<UaiPromptVisibilityConditionConfig>
+export class UaiPromptScopeCondition
+    extends UmbConditionBase<UaiPromptScopeConditionConfig>
     implements UmbExtensionCondition
 {
     #propertyEditorUiAlias: string | null = null;
     #propertyAlias: string | null = null;
-    #documentTypeAliases: string[] = [];
+    #contentTypeAliases: string[] = [];
 
-    constructor(host: UmbControllerHost, args: UmbConditionControllerArguments<UaiPromptVisibilityConditionConfig>) {
+    constructor(host: UmbControllerHost, args: UmbConditionControllerArguments<UaiPromptScopeConditionConfig>) {
         super(host, args);
 
         // Get property context for property editor UI alias and property alias
@@ -54,10 +54,10 @@ export class UaiPromptVisibilityCondition
             this.#updatePermitted();
         });
 
-        // Get content type context for document type alias
+        // Get content type context for content type alias
         this.consumeContext(UMB_PROPERTY_STRUCTURE_WORKSPACE_CONTEXT, (context) => {
             if (!context) {
-                this.#documentTypeAliases = [];
+                this.#contentTypeAliases = [];
                 this.#updatePermitted();
                 return;
             }
@@ -65,7 +65,7 @@ export class UaiPromptVisibilityCondition
             this.observe(
                 context.structure.contentTypeAliases,
                 (aliases) => {
-                    this.#documentTypeAliases = aliases ?? [];
+                    this.#contentTypeAliases = aliases ?? [];
                     this.#updatePermitted();
                 },
                 ContentTypeSymbol
@@ -74,7 +74,7 @@ export class UaiPromptVisibilityCondition
     }
 
     #updatePermitted(): void {
-        // If we don't have the basic context yet, don't show
+        // If we don't have the basic context yet, don't allow
         if (!this.#propertyEditorUiAlias || !this.#propertyAlias) {
             this.permitted = false;
             return;
@@ -83,11 +83,11 @@ export class UaiPromptVisibilityCondition
         const context: PropertyActionContext = {
             propertyEditorUiAlias: this.#propertyEditorUiAlias,
             propertyAlias: this.#propertyAlias,
-            documentTypeAliases: this.#documentTypeAliases,
+            contentTypeAliases: this.#contentTypeAliases,
         };
 
-        this.permitted = shouldShowPrompt(this.config.visibility, context);
+        this.permitted = isPromptAllowed(this.config.scope, context);
     }
 }
 
-export { UaiPromptVisibilityCondition as api };
+export { UaiPromptScopeCondition as api };

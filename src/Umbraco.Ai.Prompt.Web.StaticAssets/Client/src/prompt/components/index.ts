@@ -1,1 +1,1 @@
-export * from "./visibility-rules-editor/index.js";
+export * from "./scope-rules-editor/index.js";

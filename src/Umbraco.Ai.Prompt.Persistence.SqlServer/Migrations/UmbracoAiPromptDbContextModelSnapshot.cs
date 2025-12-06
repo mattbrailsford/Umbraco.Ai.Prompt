@@ -64,7 +64,7 @@ namespace Umbraco.Ai.Prompt.Persistence.SqlServer.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("Visibility")
+                    b.Property<string>("Scope")
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
 

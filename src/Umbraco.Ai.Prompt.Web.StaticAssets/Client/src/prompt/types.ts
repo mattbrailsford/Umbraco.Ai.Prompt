@@ -1,5 +1,5 @@
 import type { UmbEntityModel } from "@umbraco-cms/backoffice/entity";
-import type { UaiPromptVisibility } from "./property-actions/types.js";
+import type { UaiPromptScope } from "./property-actions/types.js";
 
 /**
  * Detail model for workspace editing.
@@ -13,7 +13,7 @@ export interface UaiPromptDetailModel extends UmbEntityModel {
     content: string;
     profileId: string | null;
     tags: string[];
-    visibility: UaiPromptVisibility | null;
+    scope: UaiPromptScope | null;
     isActive: boolean;
 }
 

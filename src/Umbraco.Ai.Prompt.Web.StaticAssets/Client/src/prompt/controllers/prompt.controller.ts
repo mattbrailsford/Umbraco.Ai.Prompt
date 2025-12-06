@@ -8,12 +8,12 @@ import { UaiPromptExecutionRepository } from "../repository/execution/prompt-exe
 export interface UaiPromptExecuteOptions {
     /** Optional abort signal for cancellation. */
     signal?: AbortSignal;
-    /** The entity ID for context. */
-    entityId?: string;
-    /** The entity type (e.g., "document", "media"). */
-    entityType?: string;
-    /** The property alias being edited. */
-    propertyAlias?: string;
+    /** The entity ID for context. Required for scope validation. */
+    entityId: string;
+    /** The entity type (e.g., "document", "media"). Required for scope validation. */
+    entityType: string;
+    /** The property alias being edited. Required for scope validation. */
+    propertyAlias: string;
     /** The culture variant. */
     culture?: string;
     /** The segment variant. */
@@ -72,31 +72,32 @@ export class UaiPromptController extends UmbControllerBase {
      * Executes a prompt by ID or alias and returns the AI response.
      * Calls the server-side execute endpoint which handles:
      * - Prompt resolution
+     * - Scope validation
      * - Template variable replacement
      * - (Future) Entity snapshot context
      * - AI chat completion
      *
      * @param promptIdOrAlias - The prompt ID (GUID) or alias to execute.
-     * @param options - Optional configuration (entity context, abort signal, etc.).
+     * @param options - Configuration including entity context (required for scope validation).
      * @returns The AI response content or error.
      */
     async execute(
         promptIdOrAlias: string,
-        options?: UaiPromptExecuteOptions
+        options: UaiPromptExecuteOptions
     ): Promise<{ data?: UaiPromptExecuteResult; error?: Error }> {
         try {
             const { data, error } = await this.#repository.execute(
                 promptIdOrAlias,
                 {
-                    entityId: options?.entityId,
-                    entityType: options?.entityType,
-                    propertyAlias: options?.propertyAlias,
-                    culture: options?.culture,
-                    segment: options?.segment,
-                    localContent: options?.localContent,
-                    context: options?.context,
+                    entityId: options.entityId,
+                    entityType: options.entityType,
+                    propertyAlias: options.propertyAlias,
+                    culture: options.culture,
+                    segment: options.segment,
+                    localContent: options.localContent,
+                    context: options.context,
                 },
-                options?.signal
+                options.signal
             );
 
             if (error) {

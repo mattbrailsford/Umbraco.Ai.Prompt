@@ -55,7 +55,7 @@ public class PromptMapDefinition(IShortStringHelper shortStringHelper) : IMapDef
         target.ProfileId = source.ProfileId;
         target.Tags = source.Tags?.ToList() ?? [];
         target.IsActive = true;
-        target.Visibility = MapVisibilityModelToDomain(source.Visibility);
+        target.Scope = MapScopeModelToDomain(source.Scope);
         target.DateModified = DateTime.UtcNow;
     }
 
@@ -71,7 +71,7 @@ public class PromptMapDefinition(IShortStringHelper shortStringHelper) : IMapDef
         target.ProfileId = source.ProfileId;
         target.Tags = source.Tags?.ToList() ?? [];
         target.IsActive = source.IsActive;
-        target.Visibility = MapVisibilityModelToDomain(source.Visibility);
+        target.Scope = MapScopeModelToDomain(source.Scope);
     }
 
     // Umbraco.Code.MapAll
@@ -85,7 +85,7 @@ public class PromptMapDefinition(IShortStringHelper shortStringHelper) : IMapDef
         target.ProfileId = source.ProfileId;
         target.Tags = source.Tags;
         target.IsActive = source.IsActive;
-        target.Visibility = MapVisibilityDomainToModel(source.Visibility);
+        target.Scope = MapScopeDomainToModel(source.Scope);
         target.DateCreated = source.DateCreated;
         target.DateModified = source.DateModified;
     }
@@ -101,51 +101,51 @@ public class PromptMapDefinition(IShortStringHelper shortStringHelper) : IMapDef
         target.IsActive = source.IsActive;
     }
 
-    private static AiPromptVisibility? MapVisibilityModelToDomain(VisibilityModel? model)
+    private static AiPromptScope? MapScopeModelToDomain(ScopeModel? model)
     {
         if (model is null)
         {
             return null;
         }
 
-        return new AiPromptVisibility
+        return new AiPromptScope
         {
-            ShowRules = model.ShowRules.Select(MapVisibilityRuleModelToDomain).ToList(),
-            HideRules = model.HideRules.Select(MapVisibilityRuleModelToDomain).ToList()
+            AllowRules = model.AllowRules.Select(MapScopeRuleModelToDomain).ToList(),
+            DenyRules = model.DenyRules.Select(MapScopeRuleModelToDomain).ToList()
         };
     }
 
-    private static AiPromptVisibilityRule MapVisibilityRuleModelToDomain(VisibilityRuleModel model)
+    private static AiPromptScopeRule MapScopeRuleModelToDomain(ScopeRuleModel model)
     {
-        return new AiPromptVisibilityRule
+        return new AiPromptScopeRule
         {
             PropertyEditorUiAliases = model.PropertyEditorUiAliases?.ToList(),
             PropertyAliases = model.PropertyAliases?.ToList(),
-            DocumentTypeAliases = model.DocumentTypeAliases?.ToList()
+            ContentTypeAliases = model.ContentTypeAliases?.ToList()
         };
     }
 
-    private static VisibilityModel? MapVisibilityDomainToModel(AiPromptVisibility? visibility)
+    private static ScopeModel? MapScopeDomainToModel(AiPromptScope? scope)
     {
-        if (visibility is null)
+        if (scope is null)
         {
             return null;
         }
 
-        return new VisibilityModel
+        return new ScopeModel
         {
-            ShowRules = visibility.ShowRules.Select(MapVisibilityRuleDomainToModel),
-            HideRules = visibility.HideRules.Select(MapVisibilityRuleDomainToModel)
+            AllowRules = scope.AllowRules.Select(MapScopeRuleDomainToModel),
+            DenyRules = scope.DenyRules.Select(MapScopeRuleDomainToModel)
         };
     }
 
-    private static VisibilityRuleModel MapVisibilityRuleDomainToModel(AiPromptVisibilityRule rule)
+    private static ScopeRuleModel MapScopeRuleDomainToModel(AiPromptScopeRule rule)
     {
-        return new VisibilityRuleModel
+        return new ScopeRuleModel
         {
             PropertyEditorUiAliases = rule.PropertyEditorUiAliases,
             PropertyAliases = rule.PropertyAliases,
-            DocumentTypeAliases = rule.DocumentTypeAliases
+            ContentTypeAliases = rule.ContentTypeAliases
         };
     }
 }

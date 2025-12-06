@@ -1,9 +1,9 @@
 namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Models;
 
 /// <summary>
-/// API model for a visibility rule that determines where a prompt can appear.
+/// API model for a scope rule that determines where a prompt can run.
 /// </summary>
-public class VisibilityRuleModel
+public class ScopeRuleModel
 {
     /// <summary>
     /// Property Editor UI aliases to match (e.g., 'Umb.PropertyEditorUi.TextBox').
@@ -20,9 +20,9 @@ public class VisibilityRuleModel
     public IEnumerable<string>? PropertyAliases { get; set; }
 
     /// <summary>
-    /// Document type aliases to match (e.g., 'article', 'blogPost').
-    /// If any value matches the current document type, this constraint is satisfied.
-    /// Null or empty means any document type.
+    /// Content type aliases to match (e.g., 'article', 'blogPost').
+    /// If any value matches the current content type, this constraint is satisfied.
+    /// Null or empty means any content type.
     /// </summary>
-    public IEnumerable<string>? DocumentTypeAliases { get; set; }
+    public IEnumerable<string>? ContentTypeAliases { get; set; }
 }

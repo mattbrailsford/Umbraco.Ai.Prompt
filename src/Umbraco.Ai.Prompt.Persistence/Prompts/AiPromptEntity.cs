@@ -46,9 +46,9 @@ public class AiPromptEntity
     public bool IsActive { get; set; } = true;
 
     /// <summary>
-    /// JSON-serialized visibility configuration.
+    /// JSON-serialized scope configuration.
     /// </summary>
-    public string? Visibility { get; set; }
+    public string? Scope { get; set; }
 
     /// <summary>
     /// Creation timestamp.

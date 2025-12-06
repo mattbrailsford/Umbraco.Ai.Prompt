@@ -33,6 +33,9 @@ public static class UmbracoBuilderExtensions
         // Register template service
         builder.Services.AddSingleton<IAiPromptTemplateService, AiPromptTemplateService>();
 
+        // Register scope validator
+        builder.Services.AddScoped<IAiPromptScopeValidator, AiPromptScopeValidator>();
+
         // Register service
         builder.Services.AddScoped<IAiPromptService, AiPromptService>();
 

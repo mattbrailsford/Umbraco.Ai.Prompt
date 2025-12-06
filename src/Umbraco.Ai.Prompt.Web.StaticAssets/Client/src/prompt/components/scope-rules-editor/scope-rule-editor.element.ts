@@ -1,30 +1,30 @@
 import { css, html, customElement, property, state } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { UmbTextStyles } from "@umbraco-cms/backoffice/style";
-import type { UaiVisibilityRule } from "../../property-actions/types.js";
+import type { UaiScopeRule } from "../../property-actions/types.js";
 import "../../../core/components/doctype-tags-input/doctype-tags-input.element.js";
 import "../../../core/components/property-tags-input/property-tags-input.element.js";
 import "../../../core/components/property-editor-ui-tags-input/property-editor-ui-tags-input.element.js";
 
 /**
- * Creates an empty visibility rule.
+ * Creates an empty scope rule.
  */
-export function createEmptyRule(): UaiVisibilityRule {
+export function createEmptyRule(): UaiScopeRule {
     return {
         propertyEditorUiAliases: null,
         propertyAliases: null,
-        documentTypeAliases: null,
+        contentTypeAliases: null,
     };
 }
 
 /**
- * Generates a human-readable summary for a visibility rule.
+ * Generates a human-readable summary for a scope rule.
  */
-function getRuleSummary(rule: UaiVisibilityRule): string {
+function getRuleSummary(rule: UaiScopeRule): string {
     const parts: string[] = [];
 
-    if (rule.documentTypeAliases && rule.documentTypeAliases.length > 0) {
-        parts.push(`Doc type: ${rule.documentTypeAliases.join(" | ")}`);
+    if (rule.contentTypeAliases && rule.contentTypeAliases.length > 0) {
+        parts.push(`Content type: ${rule.contentTypeAliases.join(" | ")}`);
     }
     if (rule.propertyAliases && rule.propertyAliases.length > 0) {
         parts.push(`Property: ${rule.propertyAliases.join(" | ")}`);
@@ -42,16 +42,16 @@ function getRuleSummary(rule: UaiVisibilityRule): string {
 }
 
 /**
- * Individual visibility rule editor with collapsible UI.
- * Uses tag inputs for document types, properties, and property editor UIs.
+ * Individual scope rule editor with collapsible UI.
+ * Uses tag inputs for content types, properties, and property editor UIs.
  *
  * @fires rule-change - Fires when the rule is modified
  * @fires remove - Fires when the remove button is clicked
  */
-@customElement("uai-visibility-rule-editor")
-export class UaiVisibilityRuleEditorElement extends UmbLitElement {
+@customElement("uai-scope-rule-editor")
+export class UaiScopeRuleEditorElement extends UmbLitElement {
     @property({ type: Object })
-    rule: UaiVisibilityRule = createEmptyRule();
+    rule: UaiScopeRule = createEmptyRule();
 
     @state()
     private _collapsed = true;
@@ -60,12 +60,12 @@ export class UaiVisibilityRuleEditorElement extends UmbLitElement {
         this._collapsed = !this._collapsed;
     }
 
-    #onDocumentTypeAliasesChange(event: Event) {
+    #onContentTypeAliasesChange(event: Event) {
         event.stopPropagation();
         const target = event.target as HTMLElement & { items: string[] };
         this.#dispatchChange({
             ...this.rule,
-            documentTypeAliases: target.items.length > 0 ? target.items : null,
+            contentTypeAliases: target.items.length > 0 ? target.items : null,
         });
     }
 
@@ -92,8 +92,8 @@ export class UaiVisibilityRuleEditorElement extends UmbLitElement {
         this.dispatchEvent(new Event("remove", { bubbles: true, composed: true }));
     }
 
-    #dispatchChange(rule: UaiVisibilityRule) {
-        this.dispatchEvent(new CustomEvent<UaiVisibilityRule>("rule-change", {
+    #dispatchChange(rule: UaiScopeRule) {
+        this.dispatchEvent(new CustomEvent<UaiScopeRule>("rule-change", {
             detail: rule,
             bubbles: true,
             composed: true,
@@ -111,7 +111,7 @@ export class UaiVisibilityRuleEditorElement extends UmbLitElement {
                     <uui-action-bar>
                         <uui-button
                                 look="secondary"
-                                color="defaul"
+                                color="default"
                                 compact
                                 @click=${this.#onRemove}
                                 label="Remove rule"
@@ -123,15 +123,15 @@ export class UaiVisibilityRuleEditorElement extends UmbLitElement {
 
                 <div class="rule-content" ?hidden=${this._collapsed}>
                     <umb-property-layout
-                        label="Document Type Aliases"
-                        description="Select document types where this rule applies. Empty = any."
+                        label="Content Type Aliases"
+                        description="Select content types where this rule applies. Empty = any."
                         orientation="vertical"
                     >
                         <uai-doctype-tags-input
                             slot="editor"
-                            .items=${this.rule.documentTypeAliases ?? []}
-                            placeholder="Any document type"
-                            @change=${this.#onDocumentTypeAliasesChange}
+                            .items=${this.rule.contentTypeAliases ?? []}
+                            placeholder="Any content type"
+                            @change=${this.#onContentTypeAliasesChange}
                         ></uai-doctype-tags-input>
                     </umb-property-layout>
 
@@ -170,16 +170,16 @@ export class UaiVisibilityRuleEditorElement extends UmbLitElement {
         css`
             :host {
                 display: block;
-                --umb-visibility-rule-entry-actions-opacity: 0;
+                --umb-scope-rule-entry-actions-opacity: 0;
             }
 
             :host(:hover),
             :host(:focus-within) {
-                --umb-visibility-rule-entry-actions-opacity: 1;
+                --umb-scope-rule-entry-actions-opacity: 1;
             }
 
             uui-action-bar {
-                opacity: var(--umb-visibility-rule-entry-actions-opacity, 0);
+                opacity: var(--umb-scope-rule-entry-actions-opacity, 0);
                 transition: opacity 120ms;
             }
 
@@ -235,10 +235,10 @@ export class UaiVisibilityRuleEditorElement extends UmbLitElement {
     ];
 }
 
-export default UaiVisibilityRuleEditorElement;
+export default UaiScopeRuleEditorElement;
 
 declare global {
     interface HTMLElementTagNameMap {
-        "uai-visibility-rule-editor": UaiVisibilityRuleEditorElement;
+        "uai-scope-rule-editor": UaiScopeRuleEditorElement;
     }
 }

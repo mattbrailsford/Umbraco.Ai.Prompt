@@ -5,28 +5,28 @@ import type { UaiSelectedEvent } from "@umbraco-ai/core";
 import { UaiPartialUpdateCommand, UAI_EMPTY_GUID } from "@umbraco-ai/core";
 import "@umbraco-ai/core";
 import type { UaiPromptDetailModel } from "../../../types.js";
-import type { UaiPromptVisibility, UaiVisibilityRule } from "../../../property-actions/types.js";
+import type { UaiPromptScope, UaiScopeRule } from "../../../property-actions/types.js";
 import { TEXT_BASED_PROPERTY_EDITOR_UIS } from "../../../property-actions/constants.js";
 import { UAI_PROMPT_WORKSPACE_CONTEXT } from "../prompt-workspace.context-token.js";
-import "../../../components/visibility-rules-editor/visibility-rules-editor.element.js";
+import "../../../components/scope-rules-editor/scope-rules-editor.element.js";
 
 /**
- * Creates a default visibility with one show rule for all text-based editors.
+ * Creates a default scope with one allow rule for all text-based editors.
  */
-function createDefaultVisibility(): UaiPromptVisibility {
+function createDefaultScope(): UaiPromptScope {
     return {
-        showRules: [{
+        allowRules: [{
             propertyEditorUiAliases: [...TEXT_BASED_PROPERTY_EDITOR_UIS],
             propertyAliases: null,
-            documentTypeAliases: null,
+            contentTypeAliases: null,
         }],
-        hideRules: [],
+        denyRules: [],
     };
 }
 
 /**
  * Workspace view for Prompt details.
- * Displays content, description, visibility configuration, tags, and status.
+ * Displays content, description, scope configuration, tags, and status.
  */
 @customElement("uai-prompt-details-workspace-view")
 export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
@@ -47,8 +47,8 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
         });
     }
 
-    #getVisibility(): UaiPromptVisibility {
-        return this._model?.visibility ?? createDefaultVisibility();
+    #getScope(): UaiPromptScope {
+        return this._model?.scope ?? createDefaultScope();
     }
 
     #onDescriptionChange(event: Event) {
@@ -82,27 +82,27 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
         );
     }
 
-    #updateVisibility(visibility: UaiPromptVisibility) {
+    #updateScope(scope: UaiPromptScope) {
         this.#workspaceContext?.handleCommand(
-            new UaiPartialUpdateCommand<UaiPromptDetailModel>({ visibility }, "visibility")
+            new UaiPartialUpdateCommand<UaiPromptDetailModel>({ scope }, "scope")
         );
     }
 
-    #onShowRulesChange(event: CustomEvent<UaiVisibilityRule[]>) {
+    #onAllowRulesChange(event: CustomEvent<UaiScopeRule[]>) {
         event.stopPropagation();
-        const visibility = this.#getVisibility();
-        this.#updateVisibility({
-            ...visibility,
-            showRules: event.detail,
+        const scope = this.#getScope();
+        this.#updateScope({
+            ...scope,
+            allowRules: event.detail,
         });
     }
 
-    #onHideRulesChange(event: CustomEvent<UaiVisibilityRule[]>) {
+    #onDenyRulesChange(event: CustomEvent<UaiScopeRule[]>) {
         event.stopPropagation();
-        const visibility = this.#getVisibility();
-        this.#updateVisibility({
-            ...visibility,
-            hideRules: event.detail,
+        const scope = this.#getScope();
+        this.#updateScope({
+            ...scope,
+            denyRules: event.detail,
         });
     }
 
@@ -120,7 +120,7 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
     #renderLeftColumn() {
         if (!this._model) return html`<uui-loader></uui-loader>`;
 
-        const visibility = this.#getVisibility();
+        const scope = this.#getScope();
 
         return html`
             <uui-box headline="General">
@@ -153,29 +153,29 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                 </umb-property-layout>
             </uui-box>
 
-            <uui-box headline="Visibility">
+            <uui-box headline="Scope">
                 <umb-property-layout
-                    label="Show"
-                    description="Prompt appears where ANY rule matches (OR logic between rules)"
+                    label="Allow"
+                    description="Prompt is allowed where ANY rule matches (OR logic between rules)"
                 >
-                    <uai-visibility-rules-editor
+                    <uai-scope-rules-editor
                         slot="editor"
-                        .rules=${visibility.showRules}
-                        addButtonLabel="Add Show Rule"
-                        @rules-change=${this.#onShowRulesChange}
-                    ></uai-visibility-rules-editor>
+                        .rules=${scope.allowRules}
+                        addButtonLabel="Add Allow Rule"
+                        @rules-change=${this.#onAllowRulesChange}
+                    ></uai-scope-rules-editor>
                 </umb-property-layout>
 
                 <umb-property-layout
-                    label="Hide"
-                    description="Prompt is hidden where ANY rule matches (overrides show rules)"
+                    label="Deny"
+                    description="Prompt is denied where ANY rule matches (overrides allow rules)"
                 >
-                    <uai-visibility-rules-editor
+                    <uai-scope-rules-editor
                         slot="editor"
-                        .rules=${visibility.hideRules}
-                        addButtonLabel="Add Hide Rule"
-                        @rules-change=${this.#onHideRulesChange}
-                    ></uai-visibility-rules-editor>
+                        .rules=${scope.denyRules}
+                        addButtonLabel="Add Deny Rule"
+                        @rules-change=${this.#onDenyRulesChange}
+                    ></uai-scope-rules-editor>
                 </umb-property-layout>
             </uui-box>
 
@@ -245,7 +245,7 @@ export class UaiPromptDetailsWorkspaceViewElement extends UmbLitElement {
                 margin-top: var(--uui-size-layout-1);
             }
 
-            .hide-box {
+            .deny-box {
                 --uui-box-header-color: var(--uui-color-danger);
             }
 

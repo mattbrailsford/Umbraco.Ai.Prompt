@@ -7,12 +7,12 @@ import type { PromptExecutionRequestModel } from "../../../api/types.gen.js";
  * Request model for prompt execution.
  */
 export interface UaiPromptExecutionRequest {
-    /** The entity ID for context. */
-    entityId?: string;
-    /** The entity type (e.g., "document", "media"). */
-    entityType?: string;
-    /** The property alias being edited. */
-    propertyAlias?: string;
+    /** The entity ID for context. Required for scope validation. */
+    entityId: string;
+    /** The entity type (e.g., "document", "media"). Required for scope validation. */
+    entityType: string;
+    /** The property alias being edited. Required for scope validation. */
+    propertyAlias: string;
     /** The culture variant. */
     culture?: string;
     /** The segment variant. */

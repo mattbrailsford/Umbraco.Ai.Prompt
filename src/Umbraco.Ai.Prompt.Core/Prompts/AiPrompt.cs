@@ -47,10 +47,11 @@ public sealed class AiPrompt
     public bool IsActive { get; set; } = true;
 
     /// <summary>
-    /// Visibility configuration defining where this prompt appears as a property action.
-    /// If null, the prompt does not appear anywhere (hidden by default).
+    /// Scope configuration defining where this prompt can run.
+    /// Controls both UI display and server-side enforcement.
+    /// If null, the prompt is not allowed anywhere (denied by default).
     /// </summary>
-    public AiPromptVisibility? Visibility { get; set; }
+    public AiPromptScope? Scope { get; set; }
 
     /// <summary>
     /// When the prompt was created.

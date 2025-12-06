@@ -34,9 +34,30 @@ export class UaiPromptInsertPropertyAction extends UmbPropertyActionBase<UaiProm
             throw new Error('Property context is not available');
         }
 
+        if (!this.#workspaceContext) {
+            throw new Error('Workspace context is not available');
+        }
+
         const meta = this.args.meta;
         if (!meta) {
             throw new Error('Property action meta is not available');
+        }
+
+        // Resolve required entity context for prompt execution
+        const entityId = this.#workspaceContext.getUnique();
+        const entityType = this.#workspaceContext.getEntityType();
+        const propertyAlias = this.#propertyContext.getAlias();
+
+        if (!entityId) {
+            throw new Error('Entity ID is not available');
+        }
+
+        if (!entityType) {
+            throw new Error('Entity type is not available');
+        }
+
+        if (!propertyAlias) {
+            throw new Error('Property alias is not available');
         }
 
         try {
@@ -46,9 +67,9 @@ export class UaiPromptInsertPropertyAction extends UmbPropertyActionBase<UaiProm
                     promptName: meta.label,
                     promptDescription: meta.promptDescription,
                     // Pass entity context from workspace and property for server-side execution
-                    entityId: this.#workspaceContext?.getUnique() ?? undefined,
-                    entityType: this.#workspaceContext?.getEntityType() ?? undefined,
-                    propertyAlias: this.#propertyContext.getAlias(),
+                    entityId,
+                    entityType,
+                    propertyAlias,
                     culture: this.#propertyContext.getVariantId?.()?.culture ?? undefined,
                     segment: this.#propertyContext.getVariantId?.()?.segment ?? undefined,
                 },

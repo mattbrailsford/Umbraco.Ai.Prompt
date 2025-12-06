@@ -11,7 +11,7 @@ export type CreatePromptRequestModel = {
     description?: string | null;
     profileId?: string | null;
     tags?: Array<string> | null;
-    visibility?: VisibilityModel | null;
+    scope?: ScopeModel | null;
 };
 
 export type EventMessageTypeModel = 'Default' | 'Info' | 'Error' | 'Success' | 'Warning';
@@ -37,9 +37,9 @@ export type ProblemDetails = {
 };
 
 export type PromptExecutionRequestModel = {
-    entityId?: string | null;
-    entityType?: string | null;
-    propertyAlias?: string | null;
+    entityId: string;
+    entityType: string;
+    propertyAlias: string;
     culture?: string | null;
     segment?: string | null;
     localContent?: {
@@ -73,7 +73,7 @@ export type PromptResponseModel = {
     profileId?: string | null;
     tags: Array<string>;
     isActive: boolean;
-    visibility?: VisibilityModel | null;
+    scope?: ScopeModel | null;
     dateCreated: string;
     dateModified: string;
 };
@@ -86,7 +86,7 @@ export type UpdatePromptRequestModel = {
     profileId?: string | null;
     tags?: Array<string> | null;
     isActive: boolean;
-    visibility?: VisibilityModel | null;
+    scope?: ScopeModel | null;
 };
 
 export type UsageModel = {
@@ -109,15 +109,15 @@ export type ValidationProblemDetails = {
     } | undefined;
 };
 
-export type VisibilityModel = {
-    showRules: Array<VisibilityRuleModel>;
-    hideRules: Array<VisibilityRuleModel>;
+export type ScopeModel = {
+    allowRules: Array<ScopeRuleModel>;
+    denyRules: Array<ScopeRuleModel>;
 };
 
-export type VisibilityRuleModel = {
+export type ScopeRuleModel = {
     propertyEditorUiAliases?: Array<string> | null;
     propertyAliases?: Array<string> | null;
-    documentTypeAliases?: Array<string> | null;
+    contentTypeAliases?: Array<string> | null;
 };
 
 export type GetAllPromptsData = {

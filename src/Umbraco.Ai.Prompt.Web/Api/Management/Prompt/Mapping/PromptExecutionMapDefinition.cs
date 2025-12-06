@@ -39,7 +39,7 @@ public class PromptExecutionMapDefinition : IMapDefinition
             Culture = source.Culture,
             Segment = source.Segment,
             LocalContent = source.LocalContent,
-            Context = source.Context
+            Context = source.Context,
         };
     }
 

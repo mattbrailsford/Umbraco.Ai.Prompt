@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Umbraco.Ai.Prompt.Web.Api.Management.Prompt.Models;
 
 /// <summary>
@@ -7,18 +9,24 @@ public class PromptExecutionRequestModel
 {
     /// <summary>
     /// The entity ID for context.
+    /// Required for scope validation.
     /// </summary>
-    public Guid? EntityId { get; init; }
+    [Required]
+    public required Guid EntityId { get; init; }
 
     /// <summary>
     /// The entity type (e.g., "document", "media").
+    /// Required for scope validation.
     /// </summary>
-    public string? EntityType { get; init; }
+    [Required]
+    public required string EntityType { get; init; }
 
     /// <summary>
     /// The property alias being edited.
+    /// Required for scope validation.
     /// </summary>
-    public string? PropertyAlias { get; init; }
+    [Required]
+    public required string PropertyAlias { get; init; }
 
     /// <summary>
     /// The culture variant.

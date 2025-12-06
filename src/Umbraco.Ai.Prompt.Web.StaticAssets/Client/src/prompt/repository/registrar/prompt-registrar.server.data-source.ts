@@ -57,16 +57,16 @@ export class UaiPromptRegistrarServerDataSource {
                     description: detail.description ?? null,
                     content: detail.content,
                     profileId: detail.profileId ?? null,
-                    visibility: detail.visibility ? {
-                        showRules: detail.visibility.showRules?.map(r => ({
+                    scope: detail.scope ? {
+                        allowRules: detail.scope.allowRules?.map(r => ({
                             propertyEditorUiAliases: r.propertyEditorUiAliases ?? null,
                             propertyAliases: r.propertyAliases ?? null,
-                            documentTypeAliases: r.documentTypeAliases ?? null,
+                            contentTypeAliases: r.contentTypeAliases ?? null,
                         })) ?? [],
-                        hideRules: detail.visibility.hideRules?.map(r => ({
+                        denyRules: detail.scope.denyRules?.map(r => ({
                             propertyEditorUiAliases: r.propertyEditorUiAliases ?? null,
                             propertyAliases: r.propertyAliases ?? null,
-                            documentTypeAliases: r.documentTypeAliases ?? null,
+                            contentTypeAliases: r.contentTypeAliases ?? null,
                         })) ?? [],
                     } : null,
                 } satisfies UaiPromptRegistrationModel;

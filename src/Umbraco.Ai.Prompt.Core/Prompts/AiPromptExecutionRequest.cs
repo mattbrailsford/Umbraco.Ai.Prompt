@@ -7,18 +7,21 @@ public class AiPromptExecutionRequest
 {
     /// <summary>
     /// The entity ID (document, media, etc.) for context.
+    /// Required for scope validation.
     /// </summary>
-    public Guid? EntityId { get; init; }
+    public required Guid EntityId { get; init; }
 
     /// <summary>
     /// The entity type (e.g., "document", "media").
+    /// Required for scope validation.
     /// </summary>
-    public string? EntityType { get; init; }
+    public required string EntityType { get; init; }
 
     /// <summary>
     /// The property alias being edited.
+    /// Required for scope validation.
     /// </summary>
-    public string? PropertyAlias { get; init; }
+    public required string PropertyAlias { get; init; }
 
     /// <summary>
     /// The culture/language variant.

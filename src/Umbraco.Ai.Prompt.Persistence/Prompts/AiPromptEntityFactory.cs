@@ -19,7 +19,7 @@ internal static class AiPromptEntityFactory
     public static Core.Prompts.AiPrompt BuildDomain(AiPromptEntity entity)
     {
         var tags = DeserializeTags(entity.Tags);
-        var visibility = DeserializeVisibility(entity.Visibility);
+        var scope = DeserializeScope(entity.Scope);
 
         return new Core.Prompts.AiPrompt
         {
@@ -31,7 +31,7 @@ internal static class AiPromptEntityFactory
             ProfileId = entity.ProfileId,
             Tags = tags,
             IsActive = entity.IsActive,
-            Visibility = visibility,
+            Scope = scope,
             DateCreated = entity.DateCreated,
             DateModified = entity.DateModified
         };
@@ -52,7 +52,7 @@ internal static class AiPromptEntityFactory
             ProfileId = aiPrompt.ProfileId,
             Tags = SerializeTags(aiPrompt.Tags),
             IsActive = aiPrompt.IsActive,
-            Visibility = SerializeVisibility(aiPrompt.Visibility),
+            Scope = SerializeScope(aiPrompt.Scope),
             DateCreated = aiPrompt.DateCreated,
             DateModified = aiPrompt.DateModified
         };
@@ -70,7 +70,7 @@ internal static class AiPromptEntityFactory
         entity.ProfileId = aiPrompt.ProfileId;
         entity.Tags = SerializeTags(aiPrompt.Tags);
         entity.IsActive = aiPrompt.IsActive;
-        entity.Visibility = SerializeVisibility(aiPrompt.Visibility);
+        entity.Scope = SerializeScope(aiPrompt.Scope);
         entity.DateModified = aiPrompt.DateModified;
     }
 
@@ -84,23 +84,23 @@ internal static class AiPromptEntityFactory
         return string.IsNullOrWhiteSpace(tags) ? [] : tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
-    private static string? SerializeVisibility(AiPromptVisibility? visibility)
+    private static string? SerializeScope(AiPromptScope? scope)
     {
-        if (visibility is null)
+        if (scope is null)
         {
             return null;
         }
 
-        // Don't store empty visibility as JSON - treat as null
-        if (visibility.ShowRules.Count == 0 && visibility.HideRules.Count == 0)
+        // Don't store empty scope as JSON - treat as null
+        if (scope.AllowRules.Count == 0 && scope.DenyRules.Count == 0)
         {
             return null;
         }
 
-        return JsonSerializer.Serialize(visibility, JsonOptions);
+        return JsonSerializer.Serialize(scope, JsonOptions);
     }
 
-    private static AiPromptVisibility? DeserializeVisibility(string? json)
+    private static AiPromptScope? DeserializeScope(string? json)
     {
         if (string.IsNullOrWhiteSpace(json))
         {
@@ -109,7 +109,7 @@ internal static class AiPromptEntityFactory
 
         try
         {
-            return JsonSerializer.Deserialize<AiPromptVisibility>(json, JsonOptions);
+            return JsonSerializer.Deserialize<AiPromptScope>(json, JsonOptions);
         }
         catch
         {

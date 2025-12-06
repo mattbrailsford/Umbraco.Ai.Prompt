@@ -12,15 +12,18 @@ internal sealed class AiPromptService : IAiPromptService
     private readonly IAiPromptRepository _repository;
     private readonly IAiChatService _chatService;
     private readonly IAiPromptTemplateService _templateService;
+    private readonly IAiPromptScopeValidator _scopeValidator;
 
     public AiPromptService(
         IAiPromptRepository repository,
         IAiChatService chatService,
-        IAiPromptTemplateService templateService)
+        IAiPromptTemplateService templateService,
+        IAiPromptScopeValidator scopeValidator)
     {
         _repository = repository;
         _chatService = chatService;
         _templateService = templateService;
+        _scopeValidator = scopeValidator;
     }
 
     /// <inheritdoc />
@@ -51,7 +54,7 @@ internal sealed class AiPromptService : IAiPromptService
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Alias);
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Name);
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt.Content);
-        
+
         // Generate new ID if needed
         if (prompt.Id == Guid.Empty)
         {
@@ -91,24 +94,32 @@ internal sealed class AiPromptService : IAiPromptService
         var prompt = await GetAsync(promptId, cancellationToken)
             ?? throw new InvalidOperationException($"Prompt {promptId} not found");
 
-        // 2. Build context for template replacement
+        // 2. Validate scope - ensure prompt is allowed to run for this context
+        var scopeValidation = await _scopeValidator.ValidateAsync(prompt, request, cancellationToken);
+        if (!scopeValidation.IsAllowed)
+        {
+            throw new InvalidOperationException(
+                $"Prompt execution denied: {scopeValidation.DenialReason}");
+        }
+
+        // 3. Build context for template replacement
         var context = BuildExecutionContext(request);
 
-        // 3. Process template variables
+        // 4. Process template variables
         var processedContent = _templateService.ProcessTemplate(prompt.Content, context);
 
-        // 4. Create chat message
+        // 5. Create chat message
         var messages = new List<ChatMessage>
         {
             new(ChatRole.User, processedContent)
         };
 
-        // 5. Execute via chat service
+        // 6. Execute via chat service
         var response = prompt.ProfileId.HasValue
             ? await _chatService.GetResponseAsync(prompt.ProfileId.Value, messages, cancellationToken: cancellationToken)
             : await _chatService.GetResponseAsync(messages, cancellationToken: cancellationToken);
 
-        // 6. Map response
+        // 7. Map response
         return new AiPromptExecutionResult
         {
             Content = response.Text ?? string.Empty,
@@ -121,7 +132,12 @@ internal sealed class AiPromptService : IAiPromptService
     /// </summary>
     private static Dictionary<string, object?> BuildExecutionContext(AiPromptExecutionRequest request)
     {
-        var context = new Dictionary<string, object?>();
+        var context = new Dictionary<string, object?>
+        {
+            ["entityId"] = request.EntityId.ToString(),
+            ["entityType"] = request.EntityType,
+            ["propertyAlias"] = request.PropertyAlias,
+        };
 
         // Add request-level context if provided
         if (request.Context is not null)
@@ -136,22 +152,6 @@ internal sealed class AiPromptService : IAiPromptService
         if (request.LocalContent is not null)
         {
             context["localContent"] = request.LocalContent;
-        }
-
-        // Add entity context
-        if (request.EntityId.HasValue)
-        {
-            context["entityId"] = request.EntityId.Value.ToString();
-        }
-
-        if (!string.IsNullOrEmpty(request.EntityType))
-        {
-            context["entityType"] = request.EntityType;
-        }
-
-        if (!string.IsNullOrEmpty(request.PropertyAlias))
-        {
-            context["propertyAlias"] = request.PropertyAlias;
         }
 
         if (!string.IsNullOrEmpty(request.Culture))

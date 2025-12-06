@@ -50,8 +50,8 @@ public class UpdatePromptRequestModel
     public bool IsActive { get; init; } = true;
 
     /// <summary>
-    /// Optional visibility configuration defining where this prompt appears.
-    /// Null means the prompt does not appear anywhere.
+    /// Optional scope configuration defining where this prompt can run.
+    /// Null means the prompt is not allowed anywhere.
     /// </summary>
-    public VisibilityModel? Visibility { get; init; }
+    public ScopeModel? Scope { get; init; }
 }
