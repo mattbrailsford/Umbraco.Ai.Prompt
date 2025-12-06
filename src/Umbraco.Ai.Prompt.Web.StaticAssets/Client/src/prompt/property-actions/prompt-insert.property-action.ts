@@ -1,6 +1,7 @@
 import type { UmbControllerHost } from '@umbraco-cms/backoffice/controller-api';
 import { UmbPropertyActionBase, type UmbPropertyActionArgs } from '@umbraco-cms/backoffice/property-action';
 import { UMB_PROPERTY_CONTEXT } from '@umbraco-cms/backoffice/property';
+import { UMB_CONTENT_WORKSPACE_CONTEXT } from '@umbraco-cms/backoffice/content';
 import { umbOpenModal } from '@umbraco-cms/backoffice/modal';
 import { UAI_PROMPT_PREVIEW_MODAL } from './prompt-preview-modal.token.js';
 import type { UaiPromptPropertyActionMeta } from './types.js';
@@ -10,14 +11,20 @@ import type { UaiPromptPropertyActionMeta } from './types.js';
  */
 export class UaiPromptInsertPropertyAction extends UmbPropertyActionBase<UaiPromptPropertyActionMeta> {
     #propertyContext?: typeof UMB_PROPERTY_CONTEXT.TYPE;
+    #workspaceContext?: typeof UMB_CONTENT_WORKSPACE_CONTEXT.TYPE;
     #init: Promise<unknown>;
 
     constructor(host: UmbControllerHost, args: UmbPropertyActionArgs<UaiPromptPropertyActionMeta>) {
         super(host, args);
 
-        this.#init = this.consumeContext(UMB_PROPERTY_CONTEXT, (context) => {
-            this.#propertyContext = context;
-        }).asPromise({ preventTimeout: true });
+        this.#init = Promise.all([
+            this.consumeContext(UMB_PROPERTY_CONTEXT, (context) => {
+                this.#propertyContext = context;
+            }).asPromise({ preventTimeout: true }),
+            this.consumeContext(UMB_CONTENT_WORKSPACE_CONTEXT, (context) => {
+                this.#workspaceContext = context;
+            }).asPromise({ preventTimeout: true }),
+        ]);
     }
 
     override async execute() {
@@ -38,8 +45,9 @@ export class UaiPromptInsertPropertyAction extends UmbPropertyActionBase<UaiProm
                     promptUnique: meta.promptUnique,
                     promptName: meta.label,
                     promptDescription: meta.promptDescription,
-                    // Pass entity context from property for server-side execution
-                    // entityId is not available from property context - would need workspace context
+                    // Pass entity context from workspace and property for server-side execution
+                    entityId: this.#workspaceContext?.getUnique() ?? undefined,
+                    entityType: this.#workspaceContext?.getEntityType() ?? undefined,
                     propertyAlias: this.#propertyContext.getAlias(),
                     culture: this.#propertyContext.getVariantId?.()?.culture ?? undefined,
                     segment: this.#propertyContext.getVariantId?.()?.segment ?? undefined,
