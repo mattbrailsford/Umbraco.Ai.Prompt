@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreatePromptData, CreatePromptErrors, CreatePromptResponses, DeletePromptData, DeletePromptErrors, DeletePromptResponses, GetAllPromptsData, GetAllPromptsErrors, GetAllPromptsResponses, GetDocumentTypeAliasesData, GetDocumentTypeAliasesErrors, GetDocumentTypeAliasesResponses, GetPromptByIdOrAliasData, GetPromptByIdOrAliasErrors, GetPromptByIdOrAliasResponses, GetPropertyAliasesData, GetPropertyAliasesErrors, GetPropertyAliasesResponses, UpdatePromptData, UpdatePromptErrors, UpdatePromptResponses } from './types.gen';
+import type { CreatePromptData, CreatePromptErrors, CreatePromptResponses, DeletePromptData, DeletePromptErrors, DeletePromptResponses, ExecutePromptData, ExecutePromptErrors, ExecutePromptResponses, GetAllPromptsData, GetAllPromptsErrors, GetAllPromptsResponses, GetDocumentTypeAliasesData, GetDocumentTypeAliasesErrors, GetDocumentTypeAliasesResponses, GetPromptByIdOrAliasData, GetPromptByIdOrAliasErrors, GetPromptByIdOrAliasResponses, GetPropertyAliasesData, GetPropertyAliasesErrors, GetPropertyAliasesResponses, UpdatePromptData, UpdatePromptErrors, UpdatePromptResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -84,6 +84,23 @@ export class PromptsService {
                 }
             ],
             url: '/umbraco/ai/management/api/v1/prompts/{promptIdOrAlias}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    public static executePrompt<ThrowOnError extends boolean = false>(options: Options<ExecutePromptData, ThrowOnError>) {
+        return (options.client ?? client).post<ExecutePromptResponses, ExecutePromptErrors, ThrowOnError>({
+            security: [
+                {
+                    scheme: 'bearer',
+                    type: 'http'
+                }
+            ],
+            url: '/umbraco/ai/management/api/v1/prompts/{promptIdOrAlias}/execute',
             ...options,
             headers: {
                 'Content-Type': 'application/json',

@@ -39,8 +39,7 @@ export class UaiPromptInsertPropertyAction extends UmbPropertyActionBase<UaiProm
                     promptName: meta.label,
                     promptDescription: meta.promptDescription,
                     // Pass entity context from property for server-side execution
-                    entityId: this.#propertyContext.getEntityType() ? undefined : undefined, // TODO: Get from workspace context
-                    entityType: this.#propertyContext.getEntityType?.() ?? undefined,
+                    // entityId is not available from property context - would need workspace context
                     propertyAlias: this.#propertyContext.getAlias(),
                     culture: this.#propertyContext.getVariantId?.()?.culture ?? undefined,
                     segment: this.#propertyContext.getVariantId?.()?.segment ?? undefined,

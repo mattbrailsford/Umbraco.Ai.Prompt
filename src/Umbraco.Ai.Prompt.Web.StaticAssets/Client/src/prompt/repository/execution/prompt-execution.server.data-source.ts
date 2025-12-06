@@ -1,7 +1,7 @@
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecute } from "@umbraco-cms/backoffice/resources";
 import { PromptsService } from "../../../api/index.js";
-import type { PromptExecutionRequestModel, PromptExecutionResponseModel } from "../../../api/types.gen.js";
+import type { PromptExecutionRequestModel } from "../../../api/types.gen.js";
 
 /**
  * Request model for prompt execution.
@@ -51,12 +51,12 @@ export class UaiPromptExecutionServerDataSource {
      * Executes a prompt by ID or alias and returns the AI response.
      * @param promptIdOrAlias - The prompt ID (GUID) or alias to execute.
      * @param request - The execution request containing context.
-     * @param signal - Optional abort signal for cancellation.
+     * @param _signal - Optional abort signal for cancellation (reserved for future use).
      */
     async execute(
         promptIdOrAlias: string,
         request: UaiPromptExecutionRequest,
-        signal?: AbortSignal
+        _signal?: AbortSignal
     ): Promise<{ data?: UaiPromptExecutionResponse; error?: unknown }> {
         const body: PromptExecutionRequestModel = {
             entityId: request.entityId,
@@ -73,8 +73,7 @@ export class UaiPromptExecutionServerDataSource {
             PromptsService.executePrompt({
                 path: { promptIdOrAlias },
                 body,
-            }),
-            signal
+            })
         );
 
         if (error || !data) {

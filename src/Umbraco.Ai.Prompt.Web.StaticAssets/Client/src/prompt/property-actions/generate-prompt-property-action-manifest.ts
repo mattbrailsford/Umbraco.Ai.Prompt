@@ -1,6 +1,5 @@
 import type { ManifestPropertyAction } from '@umbraco-cms/backoffice/property-action';
 import { TEXT_BASED_PROPERTY_EDITOR_UIS, UAI_PROMPT_PROPERTY_ACTION_PREFIX, UAI_PROMPT_SCOPE_CONDITION_ALIAS } from './constants.js';
-import { UAI_PROMPT_ICON } from '../constants.js';
 import type { UaiPromptRegistrationModel, UaiPromptPropertyActionMeta } from './types.js';
 import type { UaiPromptScopeConditionConfig } from './prompt-scope.condition.js';
 

@@ -36,6 +36,25 @@ export type ProblemDetails = {
     [key: string]: unknown | string | null | string | null | number | null | string | null | string | null | undefined;
 };
 
+export type PromptExecutionRequestModel = {
+    entityId?: string | null;
+    entityType?: string | null;
+    propertyAlias?: string | null;
+    culture?: string | null;
+    segment?: string | null;
+    localContent?: {
+        [key: string]: unknown;
+    } | null;
+    context?: {
+        [key: string]: unknown;
+    } | null;
+};
+
+export type PromptExecutionResponseModel = {
+    content: string;
+    usage?: UsageModel | null;
+};
+
 export type PromptItemResponseModel = {
     id: string;
     alias: string;
@@ -79,6 +98,12 @@ export type UpdatePromptRequestModel = {
     tags?: Array<string> | null;
     isActive: boolean;
     scope?: ScopeModel | null;
+};
+
+export type UsageModel = {
+    inputTokens?: number | null;
+    outputTokens?: number | null;
+    totalTokens?: number | null;
 };
 
 export type ValidationProblemDetails = {
@@ -250,6 +275,41 @@ export type UpdatePromptResponses = {
      */
     200: unknown;
 };
+
+export type ExecutePromptData = {
+    body?: PromptExecutionRequestModel;
+    path: {
+        promptIdOrAlias: string;
+    };
+    query?: never;
+    url: '/umbraco/ai/management/api/v1/prompts/{promptIdOrAlias}/execute';
+};
+
+export type ExecutePromptErrors = {
+    /**
+     * Bad Request
+     */
+    400: ProblemDetails;
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type ExecutePromptError = ExecutePromptErrors[keyof ExecutePromptErrors];
+
+export type ExecutePromptResponses = {
+    /**
+     * OK
+     */
+    200: PromptExecutionResponseModel;
+};
+
+export type ExecutePromptResponse = ExecutePromptResponses[keyof ExecutePromptResponses];
 
 export type GetDocumentTypeAliasesData = {
     body?: never;
