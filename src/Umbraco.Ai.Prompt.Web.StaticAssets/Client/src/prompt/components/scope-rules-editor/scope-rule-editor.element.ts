@@ -187,7 +187,7 @@ export class UaiScopeRuleEditorElement extends UmbLitElement {
                 display: flex;
                 align-items: center;
                 gap: var(--uui-size-space-3);
-                padding: var(--uui-size-space-3) var(--uui-size-space-4);
+                padding: var(--uui-size-space-1) var(--uui-size-space-4);
                 background: transparent;
                 cursor: pointer;
                 text-align: left;
@@ -212,7 +212,7 @@ export class UaiScopeRuleEditorElement extends UmbLitElement {
             }
 
             .rule-content {
-                padding: var(--uui-size-space-6);
+                padding: var(--uui-size-space-5);
                 display: flex;
                 flex-direction: column;
                 gap: var(--uui-size-space-6);
