@@ -3,31 +3,31 @@ import { UMB_PROPERTY_STRUCTURE_WORKSPACE_CONTEXT } from '@umbraco-cms/backoffic
 import type { UmbControllerHost } from '@umbraco-cms/backoffice/controller-api';
 import type { UmbConditionConfigBase, UmbConditionControllerArguments, UmbExtensionCondition } from '@umbraco-cms/backoffice/extension-api';
 import { UmbConditionBase } from '@umbraco-cms/backoffice/extension-registry';
-import { shouldShowPrompt, type PropertyActionContext } from './prompt-scope-matcher.js';
-import type { UaiPromptScope } from './types.js';
+import { shouldShowPrompt, type PropertyActionContext } from './prompt-visibility-matcher.js';
+import type { UaiPromptVisibility } from './types.js';
 
 /**
- * Condition configuration for prompt scope filtering.
+ * Condition configuration for prompt visibility filtering.
  */
-export interface UaiPromptScopeConditionConfig extends UmbConditionConfigBase {
-    scope: UaiPromptScope | null;
+export interface UaiPromptVisibilityConditionConfig extends UmbConditionConfigBase {
+    visibility: UaiPromptVisibility | null;
 }
 
 const PropertyContextSymbol = Symbol();
 const ContentTypeSymbol = Symbol();
 
 /**
- * Condition that determines if a prompt should appear based on its scope configuration.
+ * Condition that determines if a prompt should appear based on its visibility configuration.
  */
-export class UaiPromptScopeCondition
-    extends UmbConditionBase<UaiPromptScopeConditionConfig>
+export class UaiPromptVisibilityCondition
+    extends UmbConditionBase<UaiPromptVisibilityConditionConfig>
     implements UmbExtensionCondition
 {
     #propertyEditorUiAlias: string | null = null;
     #propertyAlias: string | null = null;
     #documentTypeAliases: string[] = [];
 
-    constructor(host: UmbControllerHost, args: UmbConditionControllerArguments<UaiPromptScopeConditionConfig>) {
+    constructor(host: UmbControllerHost, args: UmbConditionControllerArguments<UaiPromptVisibilityConditionConfig>) {
         super(host, args);
 
         // Get property context for property editor UI alias and property alias
@@ -86,8 +86,8 @@ export class UaiPromptScopeCondition
             documentTypeAliases: this.#documentTypeAliases,
         };
 
-        this.permitted = shouldShowPrompt(this.config.scope, context);
+        this.permitted = shouldShowPrompt(this.config.visibility, context);
     }
 }
 
-export { UaiPromptScopeCondition as api };
+export { UaiPromptVisibilityCondition as api };

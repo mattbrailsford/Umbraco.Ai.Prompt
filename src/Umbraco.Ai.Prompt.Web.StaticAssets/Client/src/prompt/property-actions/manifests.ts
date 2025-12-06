@@ -1,5 +1,5 @@
 import { UAI_PROMPT_PREVIEW_MODAL_ALIAS } from './prompt-preview-modal.token.js';
-import { UAI_PROMPT_SCOPE_CONDITION_ALIAS } from './constants.js';
+import { UAI_PROMPT_VISIBILITY_CONDITION_ALIAS } from './constants.js';
 
 /**
  * Static manifests for the prompt property actions feature.
@@ -14,8 +14,8 @@ export const promptPropertyActionManifests: Array<UmbExtensionManifest> = [
     },
     {
         type: 'condition',
-        alias: UAI_PROMPT_SCOPE_CONDITION_ALIAS,
-        name: 'Prompt Scope Condition',
-        api: () => import('./prompt-scope.condition.js'),
+        alias: UAI_PROMPT_VISIBILITY_CONDITION_ALIAS,
+        name: 'Prompt Visibility Condition',
+        api: () => import('./prompt-visibility.condition.js'),
     },
 ];
