@@ -35,10 +35,15 @@ export class UaiPromptInsertPropertyAction extends UmbPropertyActionBase<UaiProm
         try {
             const result = await umbOpenModal(this, UAI_PROMPT_PREVIEW_MODAL, {
                 data: {
+                    promptUnique: meta.promptUnique,
                     promptName: meta.label,
                     promptDescription: meta.promptDescription,
-                    promptContent: meta.promptContent,
-                    promptProfileId: meta.promptProfileId,
+                    // Pass entity context from property for server-side execution
+                    entityId: this.#propertyContext.getEntityType() ? undefined : undefined, // TODO: Get from workspace context
+                    entityType: this.#propertyContext.getEntityType?.() ?? undefined,
+                    propertyAlias: this.#propertyContext.getAlias(),
+                    culture: this.#propertyContext.getVariantId?.()?.culture ?? undefined,
+                    segment: this.#propertyContext.getVariantId?.()?.segment ?? undefined,
                 },
             });
 

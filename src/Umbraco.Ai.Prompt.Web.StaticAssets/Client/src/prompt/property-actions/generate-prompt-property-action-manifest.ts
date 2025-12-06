@@ -68,10 +68,7 @@ export function generatePromptPropertyActionManifest(
             icon: "icon-wand",
             label: prompt.name,
             promptUnique: prompt.unique,
-            promptAlias: prompt.alias,
-            promptContent: prompt.content,
             promptDescription: prompt.description,
-            promptProfileId: prompt.profileId,
             promptScope: prompt.scope,
         },
         conditions: [

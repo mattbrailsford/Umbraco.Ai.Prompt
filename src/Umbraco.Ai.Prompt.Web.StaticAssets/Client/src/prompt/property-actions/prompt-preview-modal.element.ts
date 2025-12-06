@@ -39,7 +39,7 @@ export class UaiPromptPreviewModalElement extends UmbModalBaseElement<
     }
 
     async #generateResponse() {
-        if (!this.data?.promptContent) return;
+        if (!this.data?.promptUnique) return;
 
         this._loading = true;
         this._error = undefined;
@@ -47,11 +47,17 @@ export class UaiPromptPreviewModalElement extends UmbModalBaseElement<
 
         this.#abortController = new AbortController();
 
+        // Call controller with prompt ID and entity context
+        // Controller internally calls the server execute endpoint
         const { data, error } = await this.#promptController.execute(
-            this.data.promptContent,
+            this.data.promptUnique,
             {
-                profileIdOrAlias: this.data.promptProfileId ?? undefined,
                 signal: this.#abortController.signal,
+                entityId: this.data.entityId,
+                entityType: this.data.entityType,
+                propertyAlias: this.data.propertyAlias,
+                culture: this.data.culture,
+                segment: this.data.segment,
             }
         );
 
@@ -150,11 +156,6 @@ export class UaiPromptPreviewModalElement extends UmbModalBaseElement<
                         ? html`<p class="description">${this.data.promptDescription}</p>`
                         : nothing}
 
-                    <details class="prompt-details">
-                        <summary>Prompt</summary>
-                        <pre class="prompt-content">${this.data?.promptContent}</pre>
-                    </details>
-
                     <div class="response-section">
                         <h4>Response</h4>
                         ${this.#renderResponse()}
@@ -202,36 +203,6 @@ export class UaiPromptPreviewModalElement extends UmbModalBaseElement<
                 margin: 0;
                 color: var(--uui-color-text-alt);
                 font-style: italic;
-            }
-
-            .prompt-details {
-                border: 1px solid var(--uui-color-border);
-                border-radius: var(--uui-border-radius);
-                background: var(--uui-color-surface-alt);
-            }
-
-            .prompt-details summary {
-                padding: var(--uui-size-space-3) var(--uui-size-space-4);
-                cursor: pointer;
-                font-weight: 600;
-                user-select: none;
-            }
-
-            .prompt-details summary:hover {
-                background: var(--uui-color-surface-emphasis);
-            }
-
-            .prompt-content {
-                margin: 0;
-                padding: var(--uui-size-space-4);
-                padding-top: 0;
-                white-space: pre-wrap;
-                word-break: break-word;
-                font-family: var(--uui-font-family-monospace);
-                font-size: var(--uui-type-small-size);
-                line-height: 1.5;
-                max-height: 150px;
-                overflow-y: auto;
             }
 
             .response-section {
